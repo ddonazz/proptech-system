@@ -1,0 +1,59 @@
+# ---------------------------------------------------
+# Maven Build System
+# ---------------------------------------------------
+# Target directories for all modules
+**/target/
+# All generated target directories in nested modules
+**/target-ide-support/
+# Local repository
+.m2/repository/
+
+# ---------------------------------------------------
+# IntelliJ IDEA
+# ---------------------------------------------------
+# Project files
+.idea/
+**/generated-sources/
+
+# ---------------------------------------------------
+# Operating System & Other Tooling
+# ---------------------------------------------------
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Linux
+*~
+.#*
+*.swp
+*.bak
+
+# ---------------------------------------------------
+# Dependencies & Archives
+# ---------------------------------------------------
+# Compiled class files
+*.class
+
+# Package files (.jar, .war, .ear, .zip)
+*.jar
+*.war
+*.ear
+*.zip
+*.tar
+*.gz
+
+# Log files
+*.log
+logs/
+
+# ---------------------------------------------------
+# Environment / Configuration Secrets
+# ---------------------------------------------------
+application-local.yml
+application-dev.yml
+*.key
+*.pem
+.env

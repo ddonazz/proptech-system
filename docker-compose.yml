@@ -1,0 +1,58 @@
+services:
+  user-db:
+    image: postgres:18-alpine
+    container_name: user-postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${USER_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${USER_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${USER_POSTGRES_DB}
+    volumes:
+      - user-postgres-data:/var/lib/postgresql/data
+
+  user-service:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    image: user-service
+    container_name: user-service
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/${USER_POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${USER_POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${USER_POSTGRES_PASSWORD}
+    depends_on:
+      - user-db
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    image: auth-service
+    container_name: auth-service
+    restart: on-failure
+    ports:
+      - "8081:8080"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - user-db
+
+volumes:
+  user-postgres-data:
+    driver: local
+  pgadmin-data:
+    driver: local

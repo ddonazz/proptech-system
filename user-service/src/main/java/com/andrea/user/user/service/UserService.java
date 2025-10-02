@@ -40,6 +40,12 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public UserDto getUserByUsername(String username) {
+        User user = retrieveUser(username);
+        return userToUserDtoMapper.apply(user);
+    }
+
+    @Transactional(readOnly = true)
     public Page<UserDto> getUsers(Pageable pageable) {
         return userRepository.findAll(pageable)
                 .map(userToUserDtoMapper);
@@ -86,5 +92,10 @@ public class UserService {
     private User retrieveUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User '" + id + "' not found."));
+    }
+
+    private User retrieveUser(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User '" + username + "' not found."));
     }
 }

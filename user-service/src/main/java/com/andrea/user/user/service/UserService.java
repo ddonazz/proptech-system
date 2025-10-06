@@ -1,5 +1,6 @@
 package com.andrea.user.user.service;
 
+import com.andrea.core.web.dto.UserDetailsResponse;
 import com.andrea.user.exception.ResourceNotFoundException;
 import com.andrea.user.role.data.Role;
 import com.andrea.user.role.data.RoleRepository;
@@ -7,11 +8,13 @@ import com.andrea.user.role.web.dto.RoleDto;
 import com.andrea.user.user.data.User;
 import com.andrea.user.user.data.UserRepository;
 import com.andrea.user.user.mapper.UserDtoToUserMapper;
+import com.andrea.user.user.mapper.UserToUserDetailsResponseMapper;
 import com.andrea.user.user.mapper.UserToUserDtoMapper;
 import com.andrea.user.user.web.dto.UserDto;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService {
 
     private final PasswordEncoder passwordEncoder;
@@ -32,16 +35,11 @@ public class UserService {
 
     private final UserToUserDtoMapper userToUserDtoMapper;
     private final UserDtoToUserMapper userDtoToUserMapper;
+    private final UserToUserDetailsResponseMapper userToUserDetailsResponseMapper;
 
     @Transactional(readOnly = true)
     public UserDto getUser(Long id) {
         User user = retrieveUser(id);
-        return userToUserDtoMapper.apply(user);
-    }
-
-    @Transactional(readOnly = true)
-    public UserDto getUserByUsername(String username) {
-        User user = retrieveUser(username);
         return userToUserDtoMapper.apply(user);
     }
 
@@ -97,5 +95,17 @@ public class UserService {
     private User retrieveUser(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User '" + username + "' not found."));
+    }
+
+    @Transactional(readOnly = true)
+    public UserDetailsResponse validateCredentials(String username, String password) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new BadCredentialsException("Invalid username or password.");
+        }
+
+        return userToUserDetailsResponseMapper.apply(user);
     }
 }

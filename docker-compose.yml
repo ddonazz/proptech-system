@@ -1,8 +1,8 @@
 services:
   auth-service:
     build:
-      context: .
-      dockerfile: auth-service/Dockerfile
+      context: /auth-service
+      dockerfile: Dockerfile
     image: nndrez/auth-service
     container_name: auth-service
     restart: on-failure
@@ -22,8 +22,8 @@ services:
 
   user-service:
     build:
-      context: .
-      dockerfile: user-service/Dockerfile
+      context: /user-service
+      dockerfile: Dockerfile
     image: nndrez/user-service
     container_name: user-service
     restart: on-failure

@@ -1,8 +1,8 @@
-package com.andrea.user.user.web;
+package com.andrea.auth.web.client;
 
 import com.andrea.core.web.dto.LoginRequest;
+import com.andrea.core.web.dto.Token;
 import com.andrea.core.web.dto.UserDetailsResponse;
-import com.andrea.user.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/internal/v1/users")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-public class InternalUserController {
+public class AuthController {
 
-    private final UserService userService;
+    private final UserServiceClient userServiceClient;
 
-    @PostMapping("/validate")
-    public ResponseEntity<UserDetailsResponse> validateCredentials(@RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok(userService.validateCredentials(loginRequest.username(), loginRequest.password()));
+    @PostMapping("/login")
+    public ResponseEntity<Token> login(@RequestBody LoginRequest loginRequest) {
+        UserDetailsResponse userDetailsResponseResponse = userServiceClient.validateCredentials(loginRequest);
+        return ResponseEntity.ok(new Token(""));
     }
-    
 }

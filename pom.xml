@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.andrea</groupId>
-    <artifactId>proptech</artifactId>
+    <groupId>com.andrea.proptech</groupId>
+    <artifactId>proptech-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -14,7 +14,7 @@
     <modules>
         <module>user-service</module>
         <module>auth-service</module>
-        <module>core</module>
+        <module>core-security</module>
     </modules>
 
     <properties>
@@ -49,13 +49,11 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
-                <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>com.andrea</groupId>
-                <artifactId>core</artifactId>
+                <groupId>com.andrea.proptech</groupId>
+                <artifactId>core-security</artifactId>
                 <version>${proptech-core.version}</version>
-                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
@@ -66,13 +64,11 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-impl</artifactId>
                 <version>${jsonwebtoken.version}</version>
-                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-jackson</artifactId>
                 <version>${jsonwebtoken.version}</version>
-                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

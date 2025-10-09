@@ -1,6 +1,3 @@
-server:
-  port: 8080
-
 spring:
   application:
     name: api-gateway
@@ -13,25 +10,25 @@ spring:
               uri: http://user-service:8080
               predicates:
                 - Path=/api/v1/users/**
-
             - id: user-service-openapi-route
               uri: http://user-service:8080
               predicates:
                 - Path=/v3/api-docs/user-service
               filters:
                 - RewritePath=/v3/api-docs/user-service, /v3/api-docs
-
             - id: auth-service-route
               uri: http://auth-service:8080
               predicates:
                 - Path=/auth/**
-
+            - id: auth-service-oauth-route
+              uri: http://auth-service:8080
+              predicates:
+                - Path=/oauth2/**
   security:
     oauth2:
       resourceserver:
         jwt:
           jwk-set-uri: http://auth-service:8080/oauth2/jwks
-
 springdoc:
   swagger-ui:
     urls:

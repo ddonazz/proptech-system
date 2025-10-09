@@ -10,7 +10,6 @@ public class UserWebClientConfig {
     @Bean("internal-user-web-client")
     WebClient internalUserWebClient() {
         return WebClient.builder()
-                // servizio utente interno
                 .baseUrl("http://user-service:8080/internal/v1/users")
                 .build();
     }

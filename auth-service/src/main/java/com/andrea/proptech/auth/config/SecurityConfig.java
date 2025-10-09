@@ -96,12 +96,10 @@ public class SecurityConfig {
                 .clientSecret("$2a$10$em2jeJo.TTmNGRFWaZ5vFON26LnHBgbzv4ElxOnQTTa9F.R5RW8EO")
 
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
 
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-
-                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/gateway")
-                .redirectUri("https://oauth.pstmn.io/v1/callback")
 
                 .redirectUri("http://localhost:8080/swagger-ui/oauth2-redirect.html")
 

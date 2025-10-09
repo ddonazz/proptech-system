@@ -4,6 +4,7 @@ import com.andrea.proptech.user.permission.PermissionName;
 import com.andrea.proptech.user.permission.data.Permission;
 import com.andrea.proptech.user.permission.data.PermissionRepository;
 import com.andrea.proptech.user.permission.web.dto.PermissionDto;
+import com.andrea.proptech.user.role.data.RoleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,12 @@ public class PermissionServiceIntegrationTest {
     @Autowired
     private PermissionRepository permissionRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     @BeforeEach
     void setUp() {
+        roleRepository.deleteAll();
         permissionRepository.deleteAll();
     }
 

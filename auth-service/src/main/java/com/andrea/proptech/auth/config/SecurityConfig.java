@@ -12,6 +12,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -57,6 +58,7 @@ public class SecurityConfig {
                         authorize
                                 .anyRequest().authenticated()
                 )
+                .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling((exceptions) -> exceptions
                         .defaultAuthenticationEntryPointFor(
                                 new LoginUrlAuthenticationEntryPoint("/login"),

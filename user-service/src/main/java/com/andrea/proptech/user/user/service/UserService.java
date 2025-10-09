@@ -1,6 +1,5 @@
 package com.andrea.proptech.user.user.service;
 
-import com.andrea.proptech.core.security.web.dto.UserDetailsResponse;
 import com.andrea.proptech.user.exception.ResourceNotFoundException;
 import com.andrea.proptech.user.role.data.Role;
 import com.andrea.proptech.user.role.data.RoleRepository;
@@ -8,13 +7,11 @@ import com.andrea.proptech.user.role.web.dto.RoleDto;
 import com.andrea.proptech.user.user.data.User;
 import com.andrea.proptech.user.user.data.UserRepository;
 import com.andrea.proptech.user.user.mapper.UserDtoToUserMapper;
-import com.andrea.proptech.user.user.mapper.UserToUserDetailsResponseMapper;
 import com.andrea.proptech.user.user.mapper.UserToUserDtoMapper;
 import com.andrea.proptech.user.user.web.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +32,6 @@ public class UserService {
 
     private final UserToUserDtoMapper userToUserDtoMapper;
     private final UserDtoToUserMapper userDtoToUserMapper;
-    private final UserToUserDetailsResponseMapper userToUserDetailsResponseMapper;
 
     @Transactional(readOnly = true)
     public UserDto getUser(Long id) {
@@ -92,20 +88,4 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User '" + id + "' not found."));
     }
 
-    private User retrieveUser(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User '" + username + "' not found."));
-    }
-
-    @Transactional(readOnly = true)
-    public UserDetailsResponse validateCredentials(String username, String password) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
-
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BadCredentialsException("Invalid username or password.");
-        }
-
-        return userToUserDetailsResponseMapper.apply(user);
-    }
 }

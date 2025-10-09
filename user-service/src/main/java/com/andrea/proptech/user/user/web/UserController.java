@@ -3,6 +3,8 @@ package com.andrea.proptech.user.user.web;
 import com.andrea.proptech.user.user.service.UserService;
 import com.andrea.proptech.user.user.web.dto.UserDto;
 import com.andrea.proptech.user.validation.OnCreate;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -17,10 +19,12 @@ import java.net.URI;
 @RestController
 @RequestMapping("/api/v1/users")
 @AllArgsConstructor
+@Tag(name = "User Management", description = "APIs for managing users")
 public class UserController {
 
     private final UserService userService;
 
+    @Operation(summary = "Create a user")
     @PostMapping
     public ResponseEntity<UserDto> createUser(@Validated({OnCreate.class}) @RequestBody UserDto userDto) {
         UserDto createdUser = userService.createUser(userDto);

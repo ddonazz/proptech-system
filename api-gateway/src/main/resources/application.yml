@@ -1,0 +1,41 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: user-service-route
+              uri: http://user-service:8080
+              predicates:
+                - Path=/api/v1/users/**
+
+            - id: user-service-openapi-route
+              uri: http://user-service:8080
+              predicates:
+                - Path=/v3/api-docs/user-service
+              filters:
+                - RewritePath=/v3/api-docs/user-service, /v3/api-docs
+
+            - id: auth-service-route
+              uri: http://auth-service:8080
+              predicates:
+                - Path=/auth/**
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://auth-service:8080/oauth2/jwks
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: User Service
+        url: /v3/api-docs/user-service
+      - name: Auth Service
+        url: /v3/api-docs/auth-service

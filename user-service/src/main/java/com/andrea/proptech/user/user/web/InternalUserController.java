@@ -1,12 +1,12 @@
 package com.andrea.proptech.user.user.web;
 
-import com.andrea.proptech.core.security.web.dto.LoginRequest;
 import com.andrea.proptech.core.security.web.dto.UserDetailsResponse;
-import com.andrea.proptech.user.user.service.UserService;
+import com.andrea.proptech.user.user.service.InternalUserService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class InternalUserController {
 
-    private final UserService userService;
+    private final InternalUserService internalUserService;
 
-    @PostMapping("/validate")
-    public ResponseEntity<UserDetailsResponse> validateCredentials(@RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok(userService.validateCredentials(loginRequest.username(), loginRequest.password()));
+    @Operation(summary = "Get a user by their ID")
+    @GetMapping("/by-username/{username}")
+    public ResponseEntity<UserDetailsResponse> byUsername(@PathVariable("username") String username) {
+        return ResponseEntity.ok(internalUserService.getUserByUsername(username));
     }
-    
+
 }

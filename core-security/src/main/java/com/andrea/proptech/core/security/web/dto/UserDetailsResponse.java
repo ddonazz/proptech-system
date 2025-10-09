@@ -5,5 +5,5 @@ import lombok.Builder;
 import java.util.Set;
 
 @Builder
-public record UserDetailsResponse(Long id, String username, Set<String> roles) {
+public record UserDetailsResponse(String username, String password, Set<String> scopes) {
 }

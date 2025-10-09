@@ -1,6 +1,7 @@
 package com.andrea.proptech.user.user.mapper;
 
 import com.andrea.proptech.core.security.web.dto.UserDetailsResponse;
+import com.andrea.proptech.user.permission.data.Permission;
 import com.andrea.proptech.user.user.data.User;
 import org.springframework.stereotype.Component;
 
@@ -12,10 +13,10 @@ public class UserToUserDetailsResponseMapper implements Function<User, UserDetai
     @Override
     public UserDetailsResponse apply(User user) {
         return UserDetailsResponse.builder()
-                .id(user.getId())
                 .username(user.getUsername())
-                .roles(user.getRoles().stream()
-                        .map(String::valueOf)
+                .password(user.getPassword())
+                .scopes(user.getRoles().stream().flatMap(role -> role.getPermissions().stream())
+                        .map(Permission::getName)
                         .collect(Collectors.toSet()))
                 .build();
     }

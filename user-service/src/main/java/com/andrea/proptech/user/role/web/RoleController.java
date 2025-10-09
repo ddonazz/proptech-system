@@ -4,6 +4,8 @@ import com.andrea.proptech.user.role.service.RoleService;
 import com.andrea.proptech.user.role.web.dto.RoleDto;
 import com.andrea.proptech.user.validation.OnCreate;
 import com.andrea.proptech.user.validation.OnUpdate;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,22 +19,26 @@ import java.net.URI;
 @RestController
 @RequestMapping("/api/v1/roles")
 @AllArgsConstructor
+@Tag(name = "Role Management", description = "APIs for managing role")
 public class RoleController {
 
     private final RoleService roleService;
 
+    @Operation(summary = "Get a role")
     @GetMapping("{id}")
     public ResponseEntity<RoleDto> getRole(@PathVariable String id) {
         RoleDto roleDto = roleService.getRole(id);
         return ResponseEntity.ok(roleDto);
     }
 
+    @Operation(summary = "Get roles")
     @GetMapping()
     public ResponseEntity<Page<RoleDto>> getRoles(Pageable pageable) {
         Page<RoleDto> roleDtos = roleService.getRoles(pageable);
         return ResponseEntity.ok(roleDtos);
     }
 
+    @Operation(summary = "Create a role")
     @PostMapping
     public ResponseEntity<RoleDto> createRole(@Validated({OnCreate.class}) @RequestBody RoleDto roleDto) {
         RoleDto createdRole = roleService.createRole(roleDto);
@@ -45,6 +51,7 @@ public class RoleController {
         return ResponseEntity.created(location).body(createdRole);
     }
 
+    @Operation(summary = "Update a role")
     @PutMapping("/{id}")
     public ResponseEntity<RoleDto> updateRole(@PathVariable String id, @Validated({OnUpdate.class}) @RequestBody RoleDto roleDto) {
         RoleDto createdRole = roleService.updateRole(id, roleDto);
@@ -52,6 +59,7 @@ public class RoleController {
         return ResponseEntity.ok(createdRole);
     }
 
+    @Operation(summary = "Delete a role")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRole(@PathVariable String id) {
         roleService.deleteRole(id);

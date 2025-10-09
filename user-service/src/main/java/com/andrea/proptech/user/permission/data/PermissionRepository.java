@@ -7,6 +7,6 @@ import java.util.Collection;
 import java.util.Set;
 
 @Repository
-public interface PermissionRepository extends JpaRepository<Permission, Long> {
+public interface PermissionRepository extends JpaRepository<Permission, String> {
     Set<Permission> findAllByNameIn(Collection<String> names);
 }

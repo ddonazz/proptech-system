@@ -8,6 +8,8 @@ services:
     restart: on-failure
     ports:
       - "9000:8080"
+    networks:
+      - app-network
     depends_on:
       - user-service
 
@@ -18,8 +20,12 @@ services:
     image: nndrez/api-gateway
     container_name: api-gateway
     restart: on-failure
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
     ports:
       - "8080:8080"
+    networks:
+      - app-network
     depends_on:
       - auth-service
       - user-service
@@ -34,6 +40,8 @@ services:
       POSTGRES_DB: ${USER_POSTGRES_DB}
     volumes:
       - user-postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
 
   user-service:
     build:
@@ -42,8 +50,6 @@ services:
     image: nndrez/user-service
     container_name: user-service
     restart: on-failure
-    ports:
-      - "8081:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/${USER_POSTGRES_DB}
@@ -51,6 +57,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${USER_POSTGRES_PASSWORD}
     depends_on:
       - user-db
+    networks:
+      - app-network
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -65,9 +73,15 @@ services:
       - pgadmin-data:/var/lib/pgadmin
     depends_on:
       - user-db
+    networks:
+      - app-network
 
 volumes:
   user-postgres-data:
     driver: local
   pgadmin-data:
     driver: local
+
+networks:
+  app-network:
+    driver: bridge

@@ -20,10 +20,10 @@ public class User {
     @SequenceGenerator(name = "user_sequence", sequenceName = "USER_SEQUENCE")
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Column
+    @Column(nullable = false)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -37,4 +37,9 @@ public class User {
     public User(String username) {
         this.username = username;
     }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
 }

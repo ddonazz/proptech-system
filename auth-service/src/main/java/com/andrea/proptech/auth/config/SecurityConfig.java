@@ -92,8 +92,7 @@ public class SecurityConfig {
     public RegisteredClientRepository registeredClientRepository() {
         RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("public-client")
-                // hash for "secret"
-                .clientSecret("$2a$10$em2jeJo.TTmNGRFWaZ5vFON26LnHBgbzv4ElxOnQTTa9F.R5RW8EO")
+                .clientSecret(passwordEncoder().encode("secret"))
 
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
@@ -103,9 +102,12 @@ public class SecurityConfig {
 
                 .redirectUri("http://localhost:8080/swagger-ui/oauth2-redirect.html")
 
-                .scope("openid")
-                .scope("profile")
-                .scope("api.read")
+                .scope("admin:access")
+                .scope("role:read")
+                .scope("role:write")
+                .scope("user:read")
+                .scope("user:write")
+                .scope("user:read")
 
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
@@ -139,7 +141,7 @@ public class SecurityConfig {
     @Bean
     public AuthorizationServerSettings authorizationServerSettings() {
         return AuthorizationServerSettings.builder()
-                .issuer("http://localhost:9000")
+                .issuer("http://auth-service:8080")
                 .build();
     }
 

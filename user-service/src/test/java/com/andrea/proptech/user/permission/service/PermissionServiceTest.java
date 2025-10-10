@@ -1,6 +1,6 @@
 package com.andrea.proptech.user.permission.service;
 
-import com.andrea.proptech.user.permission.PermissionName;
+import com.andrea.proptech.core.security.permission.PermissionAuthority;
 import com.andrea.proptech.user.permission.data.Permission;
 import com.andrea.proptech.user.permission.data.PermissionRepository;
 import com.andrea.proptech.user.permission.mapper.PermissionToPermissionDtoMapper;
@@ -35,7 +35,7 @@ public class PermissionServiceTest {
     @Test
     void findAll_whenPermissionsExist_shouldReturnPagedPermissions() {
         Pageable pageable = PageRequest.of(0, 10);
-        Permission permission = new Permission(PermissionName.ADMIN_ACCESS);
+        Permission permission = new Permission(PermissionAuthority.ADMIN_ACCESS);
         Page<Permission> page = new PageImpl<>(List.of(permission));
         PermissionDto permissionDto = PermissionDto.builder().build();
 

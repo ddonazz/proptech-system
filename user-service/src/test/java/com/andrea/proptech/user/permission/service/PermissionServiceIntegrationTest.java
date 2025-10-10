@@ -1,6 +1,6 @@
 package com.andrea.proptech.user.permission.service;
 
-import com.andrea.proptech.user.permission.PermissionName;
+import com.andrea.proptech.core.security.permission.PermissionAuthority;
 import com.andrea.proptech.user.permission.data.Permission;
 import com.andrea.proptech.user.permission.data.PermissionRepository;
 import com.andrea.proptech.user.permission.web.dto.PermissionDto;
@@ -36,8 +36,8 @@ public class PermissionServiceIntegrationTest {
 
     @Test
     void findAll_whenPermissionsExist_shouldReturnPagedPermissions() {
-        permissionRepository.save(new Permission(PermissionName.USER_READ));
-        permissionRepository.save(new Permission(PermissionName.USER_CREATE));
+        permissionRepository.save(new Permission(PermissionAuthority.USER_READ));
+        permissionRepository.save(new Permission(PermissionAuthority.USER_CREATE));
 
         Pageable pageable = PageRequest.of(0, 10);
 
@@ -45,7 +45,7 @@ public class PermissionServiceIntegrationTest {
 
         assertNotNull(result);
         assertEquals(2, result.getTotalElements());
-        assertEquals(PermissionName.USER_READ.name(), result.getContent().getFirst().name());
+        assertEquals(PermissionAuthority.USER_READ.getAuthority(), result.getContent().getFirst().authority());
     }
 
 }

@@ -1,6 +1,6 @@
 package com.andrea.proptech.user.permission.web;
 
-import com.andrea.proptech.user.permission.PermissionName;
+import com.andrea.proptech.core.security.permission.PermissionAuthority;
 import com.andrea.proptech.user.permission.service.PermissionService;
 import com.andrea.proptech.user.permission.web.dto.PermissionDto;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(PermissionController.class)
 public class PermissionControllerTest {
-    
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -36,8 +36,8 @@ public class PermissionControllerTest {
     @DisplayName("GET /api/v1/permissions should return 200 OK with a page of permissions")
     void getAllPermissions_whenCalled_shouldReturnOkAndPageOfPermissions() throws Exception {
         PermissionDto permissionDto = PermissionDto.builder()
-                .name(PermissionName.USER_READ.name())
-                .description(PermissionName.USER_READ.getDescription())
+                .authority(PermissionAuthority.USER_READ.getAuthority())
+                .description(PermissionAuthority.USER_READ.getDescription())
                 .build();
 
         Pageable pageable = PageRequest.of(0, 10);
@@ -53,8 +53,8 @@ public class PermissionControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.page.totalElements").value(1))
-                .andExpect(jsonPath("$.content[0].name").value(PermissionName.USER_READ.name()))
-                .andExpect(jsonPath("$.content[0].description").value(PermissionName.USER_READ.getDescription()));
+                .andExpect(jsonPath("$.content[0].authority").value(PermissionAuthority.USER_READ.getAuthority()))
+                .andExpect(jsonPath("$.content[0].description").value(PermissionAuthority.USER_READ.getDescription()));
     }
 
     @Test

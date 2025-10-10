@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,20 +20,22 @@ import java.net.URI;
 @RestController
 @RequestMapping("/api/v1/roles")
 @AllArgsConstructor
-@Tag(name = "Role Management", description = "APIs for managing role")
+@Tag(name = "Role Management", description = "APIs for managing roles")
 public class RoleController {
 
     private final RoleService roleService;
 
     @Operation(summary = "Get a role")
     @GetMapping("{id}")
-    public ResponseEntity<RoleDto> getRole(@PathVariable String id) {
+    @PreAuthorize("hasAuthority('role:read')")
+    public ResponseEntity<RoleDto> getRole(@PathVariable Long id) {
         RoleDto roleDto = roleService.getRole(id);
         return ResponseEntity.ok(roleDto);
     }
 
     @Operation(summary = "Get roles")
     @GetMapping()
+    @PreAuthorize("hasAuthority('role:read')")
     public ResponseEntity<Page<RoleDto>> getRoles(Pageable pageable) {
         Page<RoleDto> roleDtos = roleService.getRoles(pageable);
         return ResponseEntity.ok(roleDtos);
@@ -40,6 +43,7 @@ public class RoleController {
 
     @Operation(summary = "Create a role")
     @PostMapping
+    @PreAuthorize("hasAuthority('role:create')")
     public ResponseEntity<RoleDto> createRole(@Validated({OnCreate.class}) @RequestBody RoleDto roleDto) {
         RoleDto createdRole = roleService.createRole(roleDto);
 
@@ -53,7 +57,8 @@ public class RoleController {
 
     @Operation(summary = "Update a role")
     @PutMapping("/{id}")
-    public ResponseEntity<RoleDto> updateRole(@PathVariable String id, @Validated({OnUpdate.class}) @RequestBody RoleDto roleDto) {
+    @PreAuthorize("hasAuthority('role:update')")
+    public ResponseEntity<RoleDto> updateRole(@PathVariable Long id, @Validated({OnUpdate.class}) @RequestBody RoleDto roleDto) {
         RoleDto createdRole = roleService.updateRole(id, roleDto);
 
         return ResponseEntity.ok(createdRole);
@@ -61,7 +66,8 @@ public class RoleController {
 
     @Operation(summary = "Delete a role")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRole(@PathVariable String id) {
+    @PreAuthorize("hasAuthority('role:delete')")
+    public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
         roleService.deleteRole(id);
 
         return ResponseEntity.noContent().build();

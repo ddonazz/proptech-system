@@ -1,15 +1,9 @@
 package com.andrea.proptech.user.permission.data;
 
-import com.andrea.proptech.user.permission.PermissionName;
+import com.andrea.proptech.core.security.permission.PermissionAuthority;
 import com.andrea.proptech.user.role.data.Role;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.Objects;
 import java.util.Set;
@@ -17,12 +11,18 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Permission {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "permission_sequence")
+    @SequenceGenerator(name = "permission_sequence", sequenceName = "PERMISSION_SEQUENCE")
+    private Long id;
+
     @Column(unique = true, nullable = false)
-    private String name;
+    private String authority;
 
     @Column(nullable = false)
     private String description;
@@ -30,20 +30,20 @@ public class Permission {
     @ManyToMany(mappedBy = "permissions")
     private Set<Role> roles;
 
-    public Permission(PermissionName permissionName) {
-        this.name = permissionName.toString();
-        this.description = permissionName.getDescription();
+    public Permission(PermissionAuthority permissionAuthority) {
+        this.authority = permissionAuthority.toString();
+        this.description = permissionAuthority.getDescription();
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Permission that)) return false;
-        return Objects.equals(name, that.name);
+        return Objects.equals(authority, that.authority);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(name);
+        return Objects.hashCode(authority);
     }
 
 }

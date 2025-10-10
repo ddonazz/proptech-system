@@ -16,7 +16,7 @@ public class UserToUserDetailsResponseMapper implements Function<User, UserDetai
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .scopes(user.getRoles().stream().flatMap(role -> role.getPermissions().stream())
-                        .map(Permission::getName)
+                        .map(Permission::getAuthority)
                         .collect(Collectors.toSet()))
                 .build();
     }

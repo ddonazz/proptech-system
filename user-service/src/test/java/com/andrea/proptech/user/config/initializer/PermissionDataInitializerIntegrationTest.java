@@ -1,8 +1,9 @@
 package com.andrea.proptech.user.config.initializer;
 
-import com.andrea.proptech.user.permission.PermissionName;
+import com.andrea.proptech.core.security.permission.PermissionAuthority;
 import com.andrea.proptech.user.permission.data.Permission;
 import com.andrea.proptech.user.permission.data.PermissionRepository;
+import com.andrea.proptech.user.role.data.RoleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,12 @@ public class PermissionDataInitializerIntegrationTest {
     @Autowired
     private PermissionRepository permissionRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     @BeforeEach
     void setUp() {
+        roleRepository.deleteAll();
         permissionRepository.deleteAll();
     }
 
@@ -34,29 +39,29 @@ public class PermissionDataInitializerIntegrationTest {
         permissionDataInitializer.run();
 
         long finalCount = permissionRepository.count();
-        assertEquals(PermissionName.values().length, finalCount, "All permissions from the enum should have been saved.");
+        assertEquals(PermissionAuthority.values().length, finalCount, "All permissions from the enum should have been saved.");
     }
 
     @Test
     void run_whenSomePermissionsExist_shouldOnlySaveMissingPermissions() {
-        permissionRepository.save(new Permission(PermissionName.USER_READ));
+        permissionRepository.save(new Permission(PermissionAuthority.USER_READ));
         long initialCount = permissionRepository.count();
         assertEquals(1, initialCount, "There should be only one permission before the test.");
 
         permissionDataInitializer.run();
 
         long finalCount = permissionRepository.count();
-        assertEquals(PermissionName.values().length, finalCount, "The final number of permissions must match the enum's total.");
+        assertEquals(PermissionAuthority.values().length, finalCount, "The final number of permissions must match the enum's total.");
     }
 
     @Test
     void run_whenAllPermissionsExist_shouldNotSaveAnything() {
-        Arrays.stream(PermissionName.values())
+        Arrays.stream(PermissionAuthority.values())
                 .map(Permission::new)
                 .forEach(permissionRepository::save);
 
         long initialCount = permissionRepository.count();
-        assertEquals(PermissionName.values().length, initialCount, "All permissions should already exist in the DB.");
+        assertEquals(PermissionAuthority.values().length, initialCount, "All permissions should already exist in the DB.");
 
         permissionDataInitializer.run();
 

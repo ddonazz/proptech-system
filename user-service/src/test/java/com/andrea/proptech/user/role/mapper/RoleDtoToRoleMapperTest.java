@@ -1,6 +1,6 @@
 package com.andrea.proptech.user.role.mapper;
 
-import com.andrea.proptech.user.permission.PermissionName;
+import com.andrea.proptech.core.security.permission.PermissionAuthority;
 import com.andrea.proptech.user.permission.data.Permission;
 import com.andrea.proptech.user.permission.mapper.PermissionDtoToPermissionMapper;
 import com.andrea.proptech.user.permission.web.dto.PermissionDto;
@@ -32,14 +32,14 @@ public class RoleDtoToRoleMapperTest {
     @DisplayName("Should correctly map a RoleDto with permissions to a Role entity")
     void apply_withValidDtoAndPermissions_returnsCorrectEntity() {
         final String ROLE_NAME = "ADMIN";
-        final String PERM_1 = PermissionName.ADMIN_ACCESS.name();
-        final String PERM_2 = PermissionName.USER_READ.name();
+        final PermissionAuthority PERM_1 = PermissionAuthority.ADMIN_ACCESS;
+        final PermissionAuthority PERM_2 = PermissionAuthority.USER_READ;
 
-        PermissionDto permissionDto1 = PermissionDto.builder().name(PERM_1).build();
-        PermissionDto permissionDto2 = PermissionDto.builder().name(PERM_2).build();
+        PermissionDto permissionDto1 = PermissionDto.builder().authority(PERM_1.getAuthority()).build();
+        PermissionDto permissionDto2 = PermissionDto.builder().authority(PERM_2.getAuthority()).build();
 
-        when(permissionDtoToPermissionMapper.apply(permissionDto1)).thenReturn(new Permission(PermissionName.valueOf(permissionDto1.name())));
-        when(permissionDtoToPermissionMapper.apply(permissionDto2)).thenReturn(new Permission(PermissionName.valueOf(permissionDto2.name())));
+        when(permissionDtoToPermissionMapper.apply(permissionDto1)).thenReturn(new Permission(PERM_1));
+        when(permissionDtoToPermissionMapper.apply(permissionDto2)).thenReturn(new Permission(PERM_2));
 
         RoleDto roleDto = RoleDto.builder()
                 .name(ROLE_NAME)
@@ -54,8 +54,8 @@ public class RoleDtoToRoleMapperTest {
         Set<Permission> permissions = role.getPermissions();
         assertNotNull(permissions, "The permissions set should be initialized, not null.");
         assertEquals(2, permissions.size(), "The number of mapped permissions is incorrect.");
-        assertTrue(permissions.stream().anyMatch(p -> p.getName().equals(PERM_1)), "Permission 1 was not mapped correctly.");
-        assertTrue(permissions.stream().anyMatch(p -> p.getName().equals(PERM_2)), "Permission 2 was not mapped correctly.");
+        assertTrue(permissions.stream().anyMatch(p -> p.getAuthority().equals(PERM_1.getAuthority())), "Permission 1 was not mapped correctly.");
+        assertTrue(permissions.stream().anyMatch(p -> p.getAuthority().equals(PERM_2.getAuthority())), "Permission 2 was not mapped correctly.");
     }
 
     @Test

@@ -13,7 +13,8 @@ public class PermissionToPermissionDtoMapper implements Function<Permission, Per
     @Override
     public PermissionDto apply(@NonNull Permission permission) {
         return PermissionDto.builder()
-                .name(permission.getName())
+                .id(permission.getId())
+                .authority(permission.getAuthority())
                 .description(permission.getDescription())
                 .build();
     }

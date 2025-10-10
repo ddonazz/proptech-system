@@ -1,6 +1,6 @@
 package com.andrea.proptech.user.permission.mapper;
 
-import com.andrea.proptech.user.permission.PermissionName;
+import com.andrea.proptech.core.security.permission.PermissionAuthority;
 import com.andrea.proptech.user.permission.data.Permission;
 import com.andrea.proptech.user.permission.web.dto.PermissionDto;
 import org.junit.jupiter.api.DisplayName;
@@ -15,13 +15,13 @@ public class PermissionToPermissionDtoMapperTest {
     @Test
     @DisplayName("Should correctly map a Permission entity to a PermissionDto")
     void apply_withValidPermission_returnsCorrectDto() {
-        Permission permissionEntity = new Permission(PermissionName.USER_READ);
+        Permission permissionEntity = new Permission(PermissionAuthority.USER_READ);
 
         PermissionDto resultDto = mapper.apply(permissionEntity);
 
         assertNotNull(resultDto, "The resulting DTO should not be null.");
-        assertEquals(PermissionName.USER_READ.name(), resultDto.name(), "The name was not mapped correctly.");
-        assertEquals(PermissionName.USER_READ.getDescription(), resultDto.description(), "The description was not mapped correctly.");
+        assertEquals(PermissionAuthority.USER_READ.getAuthority(), resultDto.authority(), "The name was not mapped correctly.");
+        assertEquals(PermissionAuthority.USER_READ.getDescription(), resultDto.description(), "The description was not mapped correctly.");
     }
 
     @Test
@@ -34,13 +34,12 @@ public class PermissionToPermissionDtoMapperTest {
     @Test
     @DisplayName("Should map correctly even with empty but non-null fields")
     void apply_withEmptyFields_returnsDtoWithEmptyFields() {
-        Permission permissionEntity = new Permission(PermissionName.USER_READ);
-        permissionEntity.setDescription("");
+        Permission permissionEntity = new Permission(PermissionAuthority.USER_READ);
 
         PermissionDto resultDto = mapper.apply(permissionEntity);
 
         assertNotNull(resultDto);
-        assertEquals(PermissionName.USER_READ.name(), resultDto.name());
-        assertEquals("", resultDto.description());
+        assertEquals(PermissionAuthority.USER_READ.getAuthority(), resultDto.authority());
+        assertEquals(PermissionAuthority.USER_READ.getDescription(), resultDto.description());
     }
 }

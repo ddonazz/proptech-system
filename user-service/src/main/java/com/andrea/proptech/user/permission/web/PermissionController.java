@@ -2,6 +2,7 @@ package com.andrea.proptech.user.permission.web;
 
 import com.andrea.proptech.user.permission.service.PermissionService;
 import com.andrea.proptech.user.permission.web.dto.PermissionDto;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/v1/permissions")
 @AllArgsConstructor
+@Tag(name = "Permission Management", description = "APIs for managing permissions")
 public class PermissionController {
 
     private final PermissionService permissionService;

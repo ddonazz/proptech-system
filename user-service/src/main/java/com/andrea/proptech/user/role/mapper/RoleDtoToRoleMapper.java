@@ -18,7 +18,9 @@ public class RoleDtoToRoleMapper implements Function<RoleDto, Role> {
 
     @Override
     public Role apply(@NonNull RoleDto roleDto) {
-        Role role = new Role(roleDto.name());
+        Role role = new Role();
+        role.setName(roleDto.name());
+        role.setDescription(roleDto.description());
         role.setPermissions(roleDto.permissions()
                 .stream()
                 .map(permissionDtoToPermissionMapper)

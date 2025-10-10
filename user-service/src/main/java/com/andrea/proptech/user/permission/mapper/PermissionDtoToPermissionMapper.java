@@ -1,6 +1,5 @@
 package com.andrea.proptech.user.permission.mapper;
 
-import com.andrea.proptech.user.permission.PermissionName;
 import com.andrea.proptech.user.permission.data.Permission;
 import com.andrea.proptech.user.permission.web.dto.PermissionDto;
 import org.springframework.lang.NonNull;
@@ -13,7 +12,10 @@ public class PermissionDtoToPermissionMapper implements Function<PermissionDto, 
 
     @Override
     public Permission apply(@NonNull PermissionDto permissionDto) {
-        return new Permission(PermissionName.valueOf(permissionDto.name()));
+        return Permission.builder()
+                .authority(permissionDto.authority())
+                .description(permissionDto.description())
+                .build();
     }
 
 }

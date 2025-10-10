@@ -4,7 +4,8 @@ import lombok.Builder;
 
 @Builder
 public record PermissionDto(
-        String name,
+        Long id,
+        String authority,
         String description
 ) {
 }

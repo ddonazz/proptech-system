@@ -32,7 +32,7 @@ public class RoleService {
     private final RoleDtoToRoleMapper roleDtoToRoleMapper;
 
     @Transactional(readOnly = true)
-    public RoleDto getRole(String id) {
+    public RoleDto getRole(Long id) {
         Role role = retrieveRole(id);
         return roleToRoleDtoMapper.apply(role);
     }
@@ -55,7 +55,7 @@ public class RoleService {
     }
 
     @Transactional
-    public RoleDto updateRole(String id, RoleDto roleDto) {
+    public RoleDto updateRole(Long id, RoleDto roleDto) {
         Role role = retrieveRole(id);
 
         Set<Permission> foundPermissions = computePermissions(roleDto.permissions());
@@ -66,7 +66,7 @@ public class RoleService {
     }
 
     @Transactional
-    public void deleteRole(String id) {
+    public void deleteRole(Long id) {
         Role role = retrieveRole(id);
         if (!role.getUsers().isEmpty()) {
             throw new ResourceInUseException(
@@ -76,7 +76,7 @@ public class RoleService {
         roleRepository.deleteById(id);
     }
 
-    private Role retrieveRole(String id) {
+    private Role retrieveRole(Long id) {
         return roleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found with name: '" + id + "'."));
     }
@@ -86,8 +86,8 @@ public class RoleService {
             return new HashSet<>();
         }
 
-        return permissionRepository.findAllByNameIn(permissionDtos.stream()
-                .map(permissionDto -> String.valueOf(permissionDto.name()))
+        return permissionRepository.findAllByAuthorityIn(permissionDtos.stream()
+                .map(permissionDto -> String.valueOf(permissionDto.authority()))
                 .collect(Collectors.toSet()));
     }
 }

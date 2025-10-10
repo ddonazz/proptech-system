@@ -12,9 +12,13 @@ import java.util.Set;
 @Builder
 public record RoleDto(
 
+        Long id,
+
         @NotBlank(groups = OnCreate.class)
         @Min(value = 5, groups = OnCreate.class)
         String name,
+
+        String description,
 
         Set<PermissionDto> permissions
 ) {

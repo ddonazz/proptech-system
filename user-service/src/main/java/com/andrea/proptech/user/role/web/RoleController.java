@@ -27,7 +27,7 @@ public class RoleController {
 
     @Operation(summary = "Get a role")
     @GetMapping("{id}")
-    @PreAuthorize("hasAuthority('role:read')")
+    @PreAuthorize("hasAuthority('SCOPE_role:read')")
     public ResponseEntity<RoleDto> getRole(@PathVariable Long id) {
         RoleDto roleDto = roleService.getRole(id);
         return ResponseEntity.ok(roleDto);
@@ -35,7 +35,7 @@ public class RoleController {
 
     @Operation(summary = "Get roles")
     @GetMapping()
-    @PreAuthorize("hasAuthority('role:read')")
+    @PreAuthorize("hasAuthority('SCOPE_role:read')")
     public ResponseEntity<Page<RoleDto>> getRoles(Pageable pageable) {
         Page<RoleDto> roleDtos = roleService.getRoles(pageable);
         return ResponseEntity.ok(roleDtos);
@@ -43,7 +43,7 @@ public class RoleController {
 
     @Operation(summary = "Create a role")
     @PostMapping
-    @PreAuthorize("hasAuthority('role:create')")
+    @PreAuthorize("hasAuthority('SCOPE_role:create')")
     public ResponseEntity<RoleDto> createRole(@Validated({OnCreate.class}) @RequestBody RoleDto roleDto) {
         RoleDto createdRole = roleService.createRole(roleDto);
 
@@ -57,7 +57,7 @@ public class RoleController {
 
     @Operation(summary = "Update a role")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('role:update')")
+    @PreAuthorize("hasAuthority('SCOPE_role:update')")
     public ResponseEntity<RoleDto> updateRole(@PathVariable Long id, @Validated({OnUpdate.class}) @RequestBody RoleDto roleDto) {
         RoleDto createdRole = roleService.updateRole(id, roleDto);
 
@@ -66,7 +66,7 @@ public class RoleController {
 
     @Operation(summary = "Delete a role")
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('role:delete')")
+    @PreAuthorize("hasAuthority('SCOPE_role:delete')")
     public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
         roleService.deleteRole(id);
 

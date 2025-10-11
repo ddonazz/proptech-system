@@ -8,7 +8,8 @@ import com.andrea.proptech.user.role.data.RoleRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -19,7 +20,7 @@ import java.util.stream.Stream;
 @Log4j2
 @Component
 @AllArgsConstructor
-@DependsOn("permissionDataInitializer")
+@Order(Ordered.HIGHEST_PRECEDENCE + 1)
 public class RoleDataInitializer implements CommandLineRunner {
 
     private final RoleRepository roleRepository;

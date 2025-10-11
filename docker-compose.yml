@@ -35,9 +35,9 @@ services:
     container_name: user-postgres-db
     restart: always
     environment:
+      POSTGRES_DB: ${USER_POSTGRES_DB}
       POSTGRES_USER: ${USER_POSTGRES_USER}
       POSTGRES_PASSWORD: ${USER_POSTGRES_PASSWORD}
-      POSTGRES_DB: ${USER_POSTGRES_DB}
     volumes:
       - user-postgres-data:/var/lib/postgresql/data
     networks:

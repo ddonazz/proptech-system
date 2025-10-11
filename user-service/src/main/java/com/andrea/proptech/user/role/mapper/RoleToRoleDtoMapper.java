@@ -20,6 +20,7 @@ public class RoleToRoleDtoMapper implements Function<Role, RoleDto> {
     public RoleDto apply(@NonNull Role role) {
         return RoleDto.builder()
                 .name(role.getName())
+                .description(role.getDescription())
                 .permissions(role.getPermissions()
                         .stream()
                         .map(permissionToPermissionDtoMapper)

@@ -33,7 +33,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(userDetailsResponse.username())
                 .password(userDetailsResponse.password())
-                .authorities(userDetailsResponse.scopes().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet()))
+                .authorities(userDetailsResponse.scopes().stream()
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toSet()))
                 .build();
     }
 

@@ -1,7 +1,7 @@
 package com.andrea.proptech.user.user.service;
 
+import com.andrea.proptech.core.exception.ResourceNotFoundException;
 import com.andrea.proptech.core.security.web.dto.UserDetailsResponse;
-import com.andrea.proptech.user.exception.ResourceNotFoundException;
 import com.andrea.proptech.user.user.data.User;
 import com.andrea.proptech.user.user.data.UserRepository;
 import com.andrea.proptech.user.user.mapper.UserToUserDetailsResponseMapper;

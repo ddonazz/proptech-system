@@ -1,6 +1,6 @@
 package com.andrea.proptech.user.user.service;
 
-import com.andrea.proptech.user.exception.ResourceNotFoundException;
+import com.andrea.proptech.core.exception.ResourceNotFoundException;
 import com.andrea.proptech.user.role.data.Role;
 import com.andrea.proptech.user.role.data.RoleRepository;
 import com.andrea.proptech.user.role.web.dto.RoleDto;

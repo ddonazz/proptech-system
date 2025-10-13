@@ -1,7 +1,7 @@
 package com.andrea.proptech.user.role.service;
 
-import com.andrea.proptech.user.exception.ResourceInUseException;
-import com.andrea.proptech.user.exception.ResourceNotFoundException;
+import com.andrea.proptech.core.exception.ResourceInUseException;
+import com.andrea.proptech.core.exception.ResourceNotFoundException;
 import com.andrea.proptech.user.permission.data.Permission;
 import com.andrea.proptech.user.permission.data.PermissionRepository;
 import com.andrea.proptech.user.permission.web.dto.PermissionDto;

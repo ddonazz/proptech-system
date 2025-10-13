@@ -16,14 +16,15 @@
         <module>auth-service</module>
         <module>core-security</module>
         <module>api-gateway</module>
+        <module>core-exception</module>
     </modules>
 
     <properties>
         <java.version>21</java.version>
         <spring-boot.version>3.5.6</spring-boot.version>
         <spring-cloud.version>2025.0.0</spring-cloud.version>
-        <proptech-core.version>1.0.0-SNAPSHOT</proptech-core.version>
-        <jsonwebtoken.version>0.12.5</jsonwebtoken.version>
+        <proptech-security-core.version>1.0.0-SNAPSHOT</proptech-security-core.version>
+        <proptech-exception-core.version>1.0.0-SNAPSHOT</proptech-exception-core.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -56,22 +57,12 @@
             <dependency>
                 <groupId>com.andrea.proptech</groupId>
                 <artifactId>core-security</artifactId>
-                <version>${proptech-core.version}</version>
+                <version>${proptech-security-core.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt-api</artifactId>
-                <version>${jsonwebtoken.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt-impl</artifactId>
-                <version>${jsonwebtoken.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt-jackson</artifactId>
-                <version>${jsonwebtoken.version}</version>
+                <groupId>com.andrea.proptech</groupId>
+                <artifactId>core-exception</artifactId>
+                <version>${proptech-exception-core.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springdoc</groupId>

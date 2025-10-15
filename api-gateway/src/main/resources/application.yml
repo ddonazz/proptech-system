@@ -11,6 +11,21 @@ spring:
               predicates:
                 - Path=/api/v1/users/**
 
+            - id: role-service-route
+              uri: lb://user-service
+              predicates:
+                - Path=/api/v1/roles/**
+
+            - id: permission-service-route
+              uri: lb://user-service
+              predicates:
+                - Path=/api/v1/permissions/**
+
+            - id: auth-service-oauth-route
+              uri: lb://auth-service
+              predicates:
+                - Path=/oauth2/**
+
             - id: user-service-openapi-route
               uri: lb://user-service
               predicates:
@@ -18,15 +33,12 @@ spring:
               filters:
                 - RewritePath=/v3/api-docs/user-service, /v3/api-docs
 
-            - id: auth-service-oauth-route
-              uri: lb://auth-service
-              predicates:
-                - Path=/oauth2/**
   security:
     oauth2:
       resourceserver:
         jwt:
           jwk-set-uri: lb://auth-service/oauth2/jwks
+
 springdoc:
   swagger-ui:
     urls:

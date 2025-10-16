@@ -57,6 +57,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${USER_POSTGRES_PASSWORD}
     depends_on:
       - user-db
+      - rabbitmq
     networks:
       - app-network
 
@@ -76,10 +77,50 @@ services:
     networks:
       - app-network
 
+  rabbitmq:
+    image: rabbitmq:4.1.4-management-alpine
+    container_name: rabbitmq
+    restart: on-failure
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "check_running", "-q" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - app-network
+
+  mail-service:
+    build:
+      context: /mail-service
+      dockerfile: Dockerfile
+    image: nndrez/mail-service
+    container_name: mail-service
+    restart: on-failure
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_MAIL_HOST: ${SPRING_MAIL_HOST}
+      SPRING_MAIL_PORT: ${SPRING_MAIL_PORT}
+      SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH}
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE}
+    networks:
+      - app-network
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
 volumes:
   user-postgres-data:
     driver: local
   pgadmin-data:
+    driver: local
+  rabbitmq-data:
     driver: local
 
 networks:

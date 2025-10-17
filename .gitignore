@@ -57,3 +57,4 @@ application-dev.yml
 *.key
 *.pem
 .env
+k8s/overlays/*/*-secret.yaml

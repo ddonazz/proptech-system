@@ -23,6 +23,7 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         http
                 .authorizeExchange(exchange -> exchange
+                        .pathMatchers("/actuator/**").permitAll()
                         .pathMatchers(SWAGGER_URLS).permitAll()
                         .anyExchange().authenticated()
                 )

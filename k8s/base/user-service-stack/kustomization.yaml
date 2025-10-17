@@ -1,0 +1,4 @@
+resources:
+  - ../../components/postgres
+
+namePrefix: user-

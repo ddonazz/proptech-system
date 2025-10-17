@@ -44,3 +44,12 @@ springdoc:
     urls:
       - name: User Service
         url: /v3/api-docs/user-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,prometheus"
+  endpoint:
+    health:
+      show-details: always

@@ -76,6 +76,7 @@ public class SecurityConfig {
         http
                 .cors(withDefaults())
                 .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(withDefaults());

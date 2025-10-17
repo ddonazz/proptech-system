@@ -32,6 +32,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/internal/**").permitAll()
                         .requestMatchers(SWAGGER_UI_PATHS).permitAll()
                         .requestMatchers("/api/**").authenticated()

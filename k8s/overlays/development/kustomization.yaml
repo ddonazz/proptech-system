@@ -1,0 +1,22 @@
+resources:
+  - ../../components/rabbitmq
+  - ../../base/api-gateway
+  - ../../base/auth-service
+  - ../../base/user-service
+  - ../../base/user-service-stack
+  - ../../base/mail-service
+  - ingress.yaml
+  - user-postgres-secret.yaml
+  - user-service-configmap.yaml
+
+replacements:
+  - source:
+      kind: Secret
+      name: user-postgres-secret
+      fieldPath: metadata.name
+    targets:
+      - select:
+          kind: StatefulSet
+          name: user-postgres
+        fieldPaths:
+          - spec.template.spec.containers.0.envFrom.0.secretRef.name

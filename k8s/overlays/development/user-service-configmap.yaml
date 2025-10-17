@@ -6,3 +6,6 @@ data:
   SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER-URI: "http://auth-service:8080"
   SPRING_RABBITMQ_HOST: "rabbitmq"
   SPRING_JPA_HIBERNATE_DDL-AUTO: "update"
+  OPENAPI_SERVER_URL: "http://dev.proptech.com"
+  OPENAPI_OAUTH2_AUTHORIZATION-URL: "http://auth-service:8080/oauth2/authorize"
+  OPENAPI_OAUTH2_TOKEN-URL: "http://auth-service:8080/oauth2/token"

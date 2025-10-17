@@ -1,7 +1,7 @@
 spring:
   application:
     name: auth-service
-    
+
 management:
   endpoints:
     web:
@@ -10,3 +10,10 @@ management:
   endpoint:
     health:
       show-details: always
+
+internal-user-web-client:
+  base-url: "http://user-service/internal/v1/users"
+
+auth:
+  server:
+    issuer-uri: "http://dev.proptech.com"

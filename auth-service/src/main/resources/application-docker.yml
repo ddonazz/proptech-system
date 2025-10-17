@@ -1,0 +1,6 @@
+internal-user-web-client:
+  base-url: "http://user-service:8080/internal/v1/users"
+
+auth:
+  server:
+    issuer-uri: "http://user-service:8080"

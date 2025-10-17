@@ -21,3 +21,10 @@ management:
   endpoint:
     health:
       show-details: always
+
+openapi:
+  server:
+    url: http://api-gateway:8080
+  oauth2:
+    authorization-url: http://auth-service:8080/oauth2/authorize
+    token-url: http://auth-service:8080/oauth2/token

@@ -5,7 +5,14 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://auth-service:8080
+          issuer-uri: http://dev.proptech.com
   rabbitmq:
     host: rabbitmq
     port: 5672
+
+openapi:
+  server:
+    url: http://dev.proptech.com
+  oauth2:
+    authorization-url: http://dev.proptech.com/oauth2/authorize
+    token-url: http://dev.proptech.com/oauth2/token

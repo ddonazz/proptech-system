@@ -11,6 +11,10 @@ import java.util.function.Function;
 public class UserDtoToUserMapper implements Function<UserDto, User> {
     @Override
     public User apply(@NonNull UserDto userDto) {
-        return new User(userDto.username());
+        User user = new User();
+        user.setUsername(userDto.username());
+        user.setEmail(user.getEmail());
+        
+        return user;
     }
 }

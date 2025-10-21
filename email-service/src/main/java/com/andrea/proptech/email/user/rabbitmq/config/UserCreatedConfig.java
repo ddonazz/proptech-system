@@ -1,4 +1,4 @@
-package com.andrea.proptech.mail.user.rabbitmq.config;
+package com.andrea.proptech.email.user.rabbitmq.config;
 
 import com.andrea.proptech.core.messaging.user.rabbitmq.UserQueueDefinition;
 import org.springframework.amqp.core.Binding;

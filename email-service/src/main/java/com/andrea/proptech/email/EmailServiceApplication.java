@@ -1,11 +1,11 @@
-package com.andrea.proptech.mail;
+package com.andrea.proptech.email;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MailServiceApplication {
+public class EmailServiceApplication {
     public static void main(String[] args) {
-        SpringApplication.run(MailServiceApplication.class, args);
+        SpringApplication.run(EmailServiceApplication.class, args);
     }
 }

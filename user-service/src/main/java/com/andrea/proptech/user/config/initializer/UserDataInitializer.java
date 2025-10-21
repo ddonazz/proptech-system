@@ -30,6 +30,7 @@ public class UserDataInitializer implements CommandLineRunner {
         log.info("Checking for admin user...");
 
         String adminUsername = "admin";
+        String adminEmail = "admin@example.com";
 
         if (userRepository.findByUsername(adminUsername).isEmpty()) {
             log.info("Admin user not found, creating one...");
@@ -39,6 +40,7 @@ public class UserDataInitializer implements CommandLineRunner {
 
             User adminUser = new User();
             adminUser.setUsername(adminUsername);
+            adminUser.setEmail(adminEmail);
             adminUser.setPassword(passwordEncoder.encode("password123"));
             adminUser.setRoles(Set.of(adminRole));
 

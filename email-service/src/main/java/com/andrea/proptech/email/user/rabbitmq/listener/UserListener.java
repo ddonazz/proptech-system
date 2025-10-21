@@ -1,4 +1,4 @@
-package com.andrea.proptech.mail.user.rabbitmq.listener;
+package com.andrea.proptech.email.user.rabbitmq.listener;
 
 import com.andrea.proptech.core.messaging.user.dto.UserCreatedDto;
 import com.andrea.proptech.core.messaging.user.rabbitmq.UserQueueConstants;

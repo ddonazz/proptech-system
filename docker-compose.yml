@@ -96,12 +96,12 @@ services:
     networks:
       - app-network
 
-  mail-service:
+  email-service:
     build:
-      context: /mail-service
+      context: /email-service
       dockerfile: Dockerfile
-    image: nndrez/mail-service
-    container_name: mail-service
+    image: nndrez/email-service
+    container_name: email-service
     restart: on-failure
     environment:
       SPRING_PROFILES_ACTIVE: docker

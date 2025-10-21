@@ -1,4 +1,4 @@
-package com.andrea.proptech.mail.config;
+package com.andrea.proptech.email.config;
 
 import com.andrea.proptech.core.messaging.rabbitmq.ExchangeName;
 import org.springframework.amqp.core.TopicExchange;

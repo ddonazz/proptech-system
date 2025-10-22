@@ -17,3 +17,6 @@ internal-user-web-client:
 auth:
   server:
     issuer-uri: "http://dev.proptech.com"
+
+logging:
+  config: classpath:logback-spring.xml

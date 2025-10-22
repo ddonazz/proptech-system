@@ -6,7 +6,7 @@ import com.andrea.proptech.user.permission.data.PermissionRepository;
 import com.andrea.proptech.user.role.data.Role;
 import com.andrea.proptech.user.role.data.RoleRepository;
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Log4j2
+@Slf4j
 @Component
 @AllArgsConstructor
 @Order(Ordered.HIGHEST_PRECEDENCE + 1)

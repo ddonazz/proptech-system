@@ -14,6 +14,10 @@ services:
       - app-network
     depends_on:
       - user-service
+    logging:
+      driver: "gelf"
+      options:
+        gelf-address: "udp://127.0.0.1:12201"
 
   api-gateway:
     build:
@@ -31,6 +35,10 @@ services:
     depends_on:
       - auth-service
       - user-service
+    logging:
+      driver: "gelf"
+      options:
+        gelf-address: "udp://127.0.0.1:12201"
 
   user-db:
     image: postgres:18-alpine
@@ -62,6 +70,10 @@ services:
       - rabbitmq
     networks:
       - app-network
+    logging:
+      driver: "gelf"
+      options:
+        gelf-address: "udp://127.0.0.1:12201"
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -116,6 +128,10 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+    logging:
+      driver: "gelf"
+      options:
+        gelf-address: "udp://127.0.0.1:12201"
 
   prometheus:
     image: prom/prometheus:latest
@@ -141,6 +157,46 @@ services:
     depends_on:
       - prometheus
 
+  elasticsearch:
+    image:
+      elasticsearch:9.1.5
+    container_name: elasticsearch
+    environment:
+      - "discovery.type=single-node"
+      - "xpack.security.enabled=false"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - app-network
+
+  logstash:
+    image:
+      logstash:9.1.5
+    container_name: logstash
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - "12201:12201/udp"
+    networks:
+      - app-network
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: kibana:9.1.5
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - app-network
+    depends_on:
+      - elasticsearch
+
 volumes:
   user-postgres-data:
     driver: local
@@ -149,6 +205,8 @@ volumes:
   rabbitmq-data:
     driver: local
   grafana-data:
+    driver: local
+  elasticsearch-data:
     driver: local
 
 networks:

@@ -19,6 +19,7 @@ public class RoleToRoleDtoMapper implements Function<Role, RoleDto> {
     @Override
     public RoleDto apply(@NonNull Role role) {
         return RoleDto.builder()
+                .id(role.getId())
                 .name(role.getName())
                 .description(role.getDescription())
                 .permissions(role.getPermissions()

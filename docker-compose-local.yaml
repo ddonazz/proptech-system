@@ -40,10 +40,35 @@ services:
     networks:
       - local-network
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus-local.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - local-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data-local:/var/lib/grafana
+    networks:
+      - local-network
+    depends_on:
+      - prometheus
+
 volumes:
   user-postgres-data-local:
   rabbitmq-data-local:
   pgadmin-data-local:
+  grafana-data-local:
 
 networks:
   local-network:

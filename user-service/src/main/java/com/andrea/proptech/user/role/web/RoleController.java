@@ -1,9 +1,9 @@
 package com.andrea.proptech.user.role.web;
 
 import com.andrea.proptech.user.role.service.RoleService;
-import com.andrea.proptech.user.role.web.dto.RoleDto;
-import com.andrea.proptech.user.validation.OnCreate;
-import com.andrea.proptech.user.validation.OnUpdate;
+import com.andrea.proptech.user.role.web.dto.request.RoleCreateDto;
+import com.andrea.proptech.user.role.web.dto.request.RoleUpdateDto;
+import com.andrea.proptech.user.role.web.dto.response.RoleResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -28,40 +28,40 @@ public class RoleController {
     @Operation(summary = "Get a role")
     @GetMapping("{id}")
     @PreAuthorize("hasAuthority('SCOPE_role:read')")
-    public ResponseEntity<RoleDto> getRole(@PathVariable Long id) {
-        RoleDto roleDto = roleService.getRole(id);
-        return ResponseEntity.ok(roleDto);
+    public ResponseEntity<RoleResponseDto> getRole(@PathVariable Long id) {
+        RoleResponseDto response = roleService.getRole(id);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Get roles")
     @GetMapping()
     @PreAuthorize("hasAuthority('SCOPE_role:read')")
-    public ResponseEntity<Page<RoleDto>> getRoles(Pageable pageable) {
-        Page<RoleDto> roleDtos = roleService.getRoles(pageable);
-        return ResponseEntity.ok(roleDtos);
+    public ResponseEntity<Page<RoleResponseDto>> getRoles(Pageable pageable) {
+        Page<RoleResponseDto> response = roleService.getRoles(pageable);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Create a role")
     @PostMapping
     @PreAuthorize("hasAuthority('SCOPE_role:create')")
-    public ResponseEntity<RoleDto> createRole(@Validated({OnCreate.class}) @RequestBody RoleDto roleDto) {
-        RoleDto createdRole = roleService.createRole(roleDto);
+    public ResponseEntity<RoleResponseDto> createRole(@Validated @RequestBody RoleCreateDto request) {
+        RoleResponseDto response = roleService.createRole(request);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(createdRole.name())
+                .buildAndExpand(response.name())
                 .toUri();
 
-        return ResponseEntity.created(location).body(createdRole);
+        return ResponseEntity.created(location).body(response);
     }
 
     @Operation(summary = "Update a role")
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('SCOPE_role:update')")
-    public ResponseEntity<RoleDto> updateRole(@PathVariable Long id, @Validated({OnUpdate.class}) @RequestBody RoleDto roleDto) {
-        RoleDto createdRole = roleService.updateRole(id, roleDto);
+    public ResponseEntity<RoleResponseDto> updateRole(@PathVariable Long id, @Validated @RequestBody RoleUpdateDto roleUpdateDto) {
+        RoleResponseDto updateRole = roleService.updateRole(id, roleUpdateDto);
 
-        return ResponseEntity.ok(createdRole);
+        return ResponseEntity.ok(updateRole);
     }
 
     @Operation(summary = "Delete a role")

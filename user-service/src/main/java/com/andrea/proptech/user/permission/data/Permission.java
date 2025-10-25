@@ -18,7 +18,7 @@ public class Permission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "permission_sequence")
-    @SequenceGenerator(name = "permission_sequence", sequenceName = "PERMISSION_SEQUENCE")
+    @SequenceGenerator(name = "permission_sequence", sequenceName = "PERMISSION_SEQUENCE", allocationSize = 1)
     private Long id;
 
     @Column(unique = true, nullable = false)

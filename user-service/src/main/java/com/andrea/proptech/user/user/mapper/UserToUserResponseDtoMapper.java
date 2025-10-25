@@ -1,8 +1,8 @@
 package com.andrea.proptech.user.user.mapper;
 
-import com.andrea.proptech.user.role.mapper.RoleToRoleDtoMapper;
+import com.andrea.proptech.user.role.mapper.RoleToRoleResponseDtoMapper;
 import com.andrea.proptech.user.user.data.User;
-import com.andrea.proptech.user.user.web.dto.UserDto;
+import com.andrea.proptech.user.user.web.dto.response.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,18 +11,18 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class UserToUserDtoMapper implements Function<User, UserDto> {
+public class UserToUserResponseDtoMapper implements Function<User, UserResponseDto> {
 
-    private final RoleToRoleDtoMapper roleToRoleDtoMapper;
+    private final RoleToRoleResponseDtoMapper roleToRoleResponseDtoMapper;
 
     @Override
-    public UserDto apply(User user) {
-        return UserDto.builder()
+    public UserResponseDto apply(User user) {
+        return UserResponseDto.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .roles(user.getRoles()
                         .stream()
-                        .map(roleToRoleDtoMapper)
+                        .map(roleToRoleResponseDtoMapper)
                         .collect(Collectors.toSet()))
                 .build();
     }

@@ -3,7 +3,7 @@ package com.andrea.proptech.user.permission.service;
 import com.andrea.proptech.core.security.permission.PermissionAuthority;
 import com.andrea.proptech.user.permission.data.Permission;
 import com.andrea.proptech.user.permission.data.PermissionRepository;
-import com.andrea.proptech.user.permission.web.dto.PermissionDto;
+import com.andrea.proptech.user.permission.web.dto.response.PermissionResponseDto;
 import com.andrea.proptech.user.role.data.RoleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ public class PermissionServiceIntegrationTest {
 
         Pageable pageable = PageRequest.of(0, 10);
 
-        Page<PermissionDto> result = permissionService.findAll(pageable);
+        Page<PermissionResponseDto> result = permissionService.findAll(pageable);
 
         assertNotNull(result);
         assertEquals(2, result.getTotalElements());

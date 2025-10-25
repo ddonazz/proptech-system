@@ -1,7 +1,8 @@
 package com.andrea.proptech.user.permission.web;
 
 import com.andrea.proptech.user.permission.service.PermissionService;
-import com.andrea.proptech.user.permission.web.dto.PermissionDto;
+import com.andrea.proptech.user.permission.web.dto.response.PermissionResponseDto;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,9 +20,10 @@ public class PermissionController {
 
     private final PermissionService permissionService;
 
+    @Operation(summary = "Retrieve available permissions")
     @GetMapping
-    public ResponseEntity<Page<PermissionDto>> getAllPermissions(Pageable pageable) {
-        Page<PermissionDto> permissions = permissionService.findAll(pageable);
+    public ResponseEntity<Page<PermissionResponseDto>> getAllPermissions(Pageable pageable) {
+        Page<PermissionResponseDto> permissions = permissionService.findAll(pageable);
         return ResponseEntity.ok(permissions);
     }
 }

@@ -60,6 +60,10 @@
             <artifactId>micrometer-tracing-bridge-brave</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>com.andrea.proptech</groupId>
+            <artifactId>core-config</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

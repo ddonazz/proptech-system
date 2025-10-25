@@ -1,0 +1,11 @@
+authority,description
+"user:read","Read user"
+"user:create","Create user"
+"user:update","Update user"
+"user:delete","Delete user"
+"role:read","Read role"
+"role:create","Create role"
+"role:update","Update role"
+"role:delete","Delete role"
+"permission:read","Read permission"
+"admin:access","Admin access"

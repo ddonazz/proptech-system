@@ -1,0 +1,143 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-create-permission-table
+      author: andrea
+      changes:
+        - createSequence:
+            sequenceName: PERMISSION_SEQUENCE
+            incrementBy: 1
+        - createTable:
+            tableName: permission
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: "NEXTVAL('PERMISSION_SEQUENCE')"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: authority
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 2-create-role-table
+      author: andrea
+      changes:
+        - createSequence:
+            sequenceName: ROLE_SEQUENCE
+            incrementBy: 1
+        - createTable:
+            tableName: role
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: "NEXTVAL('ROLE_SEQUENCE')"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+
+  - changeSet:
+      id: 3-create-users-table
+      author: andrea
+      changes:
+        - createSequence:
+            sequenceName: USER_SEQUENCE
+            incrementBy: 1
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: "NEXTVAL('USER_SEQUENCE')"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(1024)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 4-create-roles-permissions-join-table
+      author: andrea
+      changes:
+        - createTable:
+            tableName: roles_permissions
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_roleperm_role
+                    references: role(id)
+                    nullable: false
+              - column:
+                  name: permission_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_roleperm_perm
+                    references: permission(id)
+                    nullable: false
+        - addPrimaryKey:
+            tableName: roles_permissions
+            columnNames: role_id, permission_id
+            constraintName: pk_roles_permissions
+
+  - changeSet:
+      id: 5-create-users-roles-join-table
+      author: andrea
+      changes:
+        - createTable:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_userrole_user
+                    references: users(id)
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_userrole_role
+                    references: role(id)
+                    nullable: false
+        - addPrimaryKey:
+            tableName: users_roles
+            columnNames: user_id, role_id
+            constraintName: pk_users_roles

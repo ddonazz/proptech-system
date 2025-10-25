@@ -2,9 +2,6 @@ spring:
   devtools:
     restart:
       enabled: false
-  jpa:
-    hibernate:
-      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect

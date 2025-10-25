@@ -4,12 +4,13 @@ import com.andrea.proptech.core.exception.ResourceInUseException;
 import com.andrea.proptech.core.exception.ResourceNotFoundException;
 import com.andrea.proptech.user.permission.data.Permission;
 import com.andrea.proptech.user.permission.data.PermissionRepository;
-import com.andrea.proptech.user.permission.web.dto.PermissionDto;
 import com.andrea.proptech.user.role.data.Role;
 import com.andrea.proptech.user.role.data.RoleRepository;
-import com.andrea.proptech.user.role.mapper.RoleDtoToRoleMapper;
-import com.andrea.proptech.user.role.mapper.RoleToRoleDtoMapper;
-import com.andrea.proptech.user.role.web.dto.RoleDto;
+import com.andrea.proptech.user.role.mapper.RoleCreateDtoToRoleMapper;
+import com.andrea.proptech.user.role.mapper.RoleToRoleResponseDtoMapper;
+import com.andrea.proptech.user.role.web.dto.request.RoleCreateDto;
+import com.andrea.proptech.user.role.web.dto.request.RoleUpdateDto;
+import com.andrea.proptech.user.role.web.dto.response.RoleResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -28,41 +28,41 @@ public class RoleService {
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
 
-    private final RoleToRoleDtoMapper roleToRoleDtoMapper;
-    private final RoleDtoToRoleMapper roleDtoToRoleMapper;
+    private final RoleToRoleResponseDtoMapper roleToRoleResponseDtoMapper;
+    private final RoleCreateDtoToRoleMapper roleCreateDtoToRoleMapper;
 
     @Transactional(readOnly = true)
-    public RoleDto getRole(Long id) {
+    public RoleResponseDto getRole(Long id) {
         Role role = retrieveRole(id);
-        return roleToRoleDtoMapper.apply(role);
+        return roleToRoleResponseDtoMapper.apply(role);
     }
 
     @Transactional(readOnly = true)
-    public Page<RoleDto> getRoles(Pageable pageable) {
+    public Page<RoleResponseDto> getRoles(Pageable pageable) {
         return roleRepository.findAll(pageable)
-                .map(roleToRoleDtoMapper);
+                .map(roleToRoleResponseDtoMapper);
     }
 
     @Transactional
-    public RoleDto createRole(RoleDto roleDto) {
-        Set<Permission> foundPermissions = computePermissions(roleDto.permissions());
+    public RoleResponseDto createRole(RoleCreateDto request) {
+        Set<Permission> foundPermissions = computePermissions(request.permissions());
 
-        Role role = roleDtoToRoleMapper.apply(roleDto);
+        Role role = roleCreateDtoToRoleMapper.apply(request);
         role.setPermissions(foundPermissions);
 
         Role savedRole = roleRepository.save(role);
-        return roleToRoleDtoMapper.apply(savedRole);
+        return roleToRoleResponseDtoMapper.apply(savedRole);
     }
 
     @Transactional
-    public RoleDto updateRole(Long id, RoleDto roleDto) {
+    public RoleResponseDto updateRole(Long id, RoleUpdateDto roleUpdateDto) {
         Role role = retrieveRole(id);
 
-        Set<Permission> foundPermissions = computePermissions(roleDto.permissions());
+        Set<Permission> foundPermissions = computePermissions(roleUpdateDto.permissions());
         role.setPermissions(foundPermissions);
 
         Role savedRole = roleRepository.save(role);
-        return roleToRoleDtoMapper.apply(savedRole);
+        return roleToRoleResponseDtoMapper.apply(savedRole);
     }
 
     @Transactional
@@ -81,13 +81,11 @@ public class RoleService {
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found with name: '" + id + "'."));
     }
 
-    private Set<Permission> computePermissions(Collection<PermissionDto> permissionDtos) {
-        if (permissionDtos == null || permissionDtos.isEmpty()) {
+    private Set<Permission> computePermissions(Collection<Long> permissionIds) {
+        if (permissionIds == null || permissionIds.isEmpty()) {
             return new HashSet<>();
         }
 
-        return permissionRepository.findAllByAuthorityIn(permissionDtos.stream()
-                .map(permissionDto -> String.valueOf(permissionDto.authority()))
-                .collect(Collectors.toSet()));
+        return permissionRepository.findAllByIdIn(permissionIds);
     }
 }

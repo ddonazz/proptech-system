@@ -2,22 +2,22 @@ package com.andrea.proptech.user.permission.mapper;
 
 import com.andrea.proptech.core.security.permission.PermissionAuthority;
 import com.andrea.proptech.user.permission.data.Permission;
-import com.andrea.proptech.user.permission.web.dto.PermissionDto;
+import com.andrea.proptech.user.permission.web.dto.response.PermissionResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PermissionToPermissionDtoMapperTest {
+public class PermissionToPermissionResponseDtoMapperTest {
 
-    private final PermissionToPermissionDtoMapper mapper = new PermissionToPermissionDtoMapper();
+    private final PermissionToPermissionResponseDtoMapper mapper = new PermissionToPermissionResponseDtoMapper();
 
     @Test
     @DisplayName("Should correctly map a Permission entity to a PermissionDto")
     void apply_withValidPermission_returnsCorrectDto() {
         Permission permissionEntity = new Permission(PermissionAuthority.USER_READ);
 
-        PermissionDto resultDto = mapper.apply(permissionEntity);
+        PermissionResponseDto resultDto = mapper.apply(permissionEntity);
 
         assertNotNull(resultDto, "The resulting DTO should not be null.");
         assertEquals(PermissionAuthority.USER_READ.getAuthority(), resultDto.authority(), "The name was not mapped correctly.");
@@ -36,7 +36,7 @@ public class PermissionToPermissionDtoMapperTest {
     void apply_withEmptyFields_returnsDtoWithEmptyFields() {
         Permission permissionEntity = new Permission(PermissionAuthority.USER_READ);
 
-        PermissionDto resultDto = mapper.apply(permissionEntity);
+        PermissionResponseDto resultDto = mapper.apply(permissionEntity);
 
         assertNotNull(resultDto);
         assertEquals(PermissionAuthority.USER_READ.getAuthority(), resultDto.authority());

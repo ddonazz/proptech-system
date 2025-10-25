@@ -6,16 +6,22 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://dev.proptech.com
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    enabled: true
+    change-log: classpath:db/db.changelog-master.yaml
   rabbitmq:
     host: rabbitmq
     port: 5672
 
 openapi:
   server:
-    url: http://dev.proptech.com
+    url: https://dev.proptech.com
   oauth2:
-    authorization-url: http://dev.proptech.com/oauth2/authorize
-    token-url: http://dev.proptech.com/oauth2/token
+    authorization-url: https://dev.proptech.com/oauth2/authorize
+    token-url: https://dev.proptech.com/oauth2/token
 
 management:
   endpoints:
@@ -25,6 +31,3 @@ management:
   endpoint:
     health:
       show-details: always
-
-logging:
-  config: classpath:logback-spring.xml

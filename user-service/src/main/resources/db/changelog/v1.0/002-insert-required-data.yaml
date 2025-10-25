@@ -1,0 +1,106 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6-insert-permissions
+      author: andrea
+      changes:
+        - loadData:
+            tableName: permission
+            file: db/data/permissions.csv
+            separator: ','
+            quotchar: '"'
+            encoding: UTF-8
+            columns:
+              - column:
+                  name: authority
+                  type: STRING
+              - column:
+                  name: description
+                  type: STRING
+      rollback:
+        - delete:
+            tableName: permission
+
+  - changeSet:
+      id: 7-load-roles
+      author: andrea
+      changes:
+        - loadData:
+            tableName: role
+            file: db/data/roles.csv
+            separator: ','
+            quotchar: '"'
+            encoding: UTF-8
+            columns:
+              - column:
+                  name: name
+                  type: STRING
+              - column:
+                  name: description
+                  type: STRING
+      rollback:
+        - delete:
+            tableName: role
+
+  - changeSet:
+      id: 8-map-permissions-to-roles
+      author: andrea
+      changes:
+        - sql:
+            sql: "INSERT INTO roles_permissions (role_id, permission_id) 
+                  SELECT 
+                    (SELECT id FROM role WHERE name = 'ROLE_ADMIN'), 
+                    p.id 
+                  FROM permission p"
+        - sql:
+            sql: "INSERT INTO roles_permissions (role_id, permission_id) 
+                  SELECT 
+                    (SELECT id FROM role WHERE name = 'ROLE_USER'), 
+                    p.id 
+                  FROM permission p 
+                  WHERE p.authority IN ('user:read', 'permission:read', 'role:read')"
+      rollback:
+        - sql:
+            sql: "DELETE FROM roles_permissions WHERE role_id = (SELECT id FROM role WHERE name = 'ROLE_ADMIN')"
+        - sql:
+            sql: "DELETE FROM roles_permissions WHERE role_id = (SELECT id FROM role WHERE name = 'ROLE_USER')"
+
+  - changeSet:
+      id: 9-load-admin-user
+      author: andrea
+      changes:
+        - loadData:
+            tableName: users
+            file: db/data/users.csv
+            separator: ','
+            quotchar: '"'
+            encoding: UTF-8
+            columns:
+              - column:
+                  name: username
+                  type: STRING
+              - column:
+                  name: email
+                  type: STRING
+              - column:
+                  name: password
+                  type: STRING
+      rollback:
+        - delete:
+            tableName: users
+            where: "username = 'admin'"
+
+  - changeSet:
+      id: 10-map-admin-to-role
+      author: andrea
+      changes:
+        - sql:
+            sql: "INSERT INTO users_roles (user_id, role_id) 
+                  VALUES (
+                    (SELECT id FROM users WHERE username = 'admin'), 
+                    (SELECT id FROM role WHERE name = 'ROLE_ADMIN')
+                  )"
+      rollback:
+        - sql:
+            sql: "DELETE FROM users_roles 
+                  WHERE user_id = (SELECT id FROM users WHERE username = 'admin') 
+                  AND role_id = (SELECT id FROM role WHERE name = 'ROLE_ADMIN')"

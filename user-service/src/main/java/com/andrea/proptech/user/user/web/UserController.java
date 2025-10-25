@@ -1,9 +1,9 @@
 package com.andrea.proptech.user.user.web;
 
 import com.andrea.proptech.user.user.service.UserService;
-import com.andrea.proptech.user.user.web.dto.UserDto;
-import com.andrea.proptech.user.validation.OnCreate;
-import com.andrea.proptech.user.validation.OnUpdate;
+import com.andrea.proptech.user.user.web.dto.request.UserCreateDto;
+import com.andrea.proptech.user.user.web.dto.request.UserUpdateDto;
+import com.andrea.proptech.user.user.web.dto.response.UserResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -28,24 +28,24 @@ public class UserController {
     @Operation(summary = "Get a user")
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('SCOPE_user:read')")
-    public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
-        UserDto userDto = userService.getUser(id);
+    public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id) {
+        UserResponseDto userDto = userService.getUser(id);
         return ResponseEntity.ok(userDto);
     }
 
     @Operation(summary = "Get users")
     @GetMapping
     @PreAuthorize("hasAuthority('SCOPE_user:read')")
-    public ResponseEntity<Page<UserDto>> getUsers(Pageable pageable) {
-        Page<UserDto> userDtos = userService.getUsers(pageable);
+    public ResponseEntity<Page<UserResponseDto>> getUsers(Pageable pageable) {
+        Page<UserResponseDto> userDtos = userService.getUsers(pageable);
         return ResponseEntity.ok(userDtos);
     }
 
     @Operation(summary = "Create a user")
     @PostMapping
     @PreAuthorize("hasAuthority('SCOPE_user:create')")
-    public ResponseEntity<UserDto> createUser(@Validated({OnCreate.class}) @RequestBody UserDto userDto) {
-        UserDto createdUser = userService.createUser(userDto);
+    public ResponseEntity<UserResponseDto> createUser(@Validated @RequestBody UserCreateDto userCreateDto) {
+        UserResponseDto createdUser = userService.createUser(userCreateDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -58,8 +58,8 @@ public class UserController {
     @Operation(summary = "Update a user")
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('SCOPE_user:update')")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Validated({OnUpdate.class}) @RequestBody UserDto userDto) {
-        UserDto updatedUser = userService.updateUser(id, userDto);
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @Validated @RequestBody UserUpdateDto userUpdateDto) {
+        UserResponseDto updatedUser = userService.updateUser(id, userUpdateDto);
         return ResponseEntity.ok(updatedUser);
     }
 

@@ -2,7 +2,7 @@ package com.andrea.proptech.user.permission.web;
 
 import com.andrea.proptech.core.security.permission.PermissionAuthority;
 import com.andrea.proptech.user.permission.service.PermissionService;
-import com.andrea.proptech.user.permission.web.dto.PermissionDto;
+import com.andrea.proptech.user.permission.web.dto.response.PermissionResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +35,13 @@ public class PermissionControllerTest {
     @Test
     @DisplayName("GET /api/v1/permissions should return 200 OK with a page of permissions")
     void getAllPermissions_whenCalled_shouldReturnOkAndPageOfPermissions() throws Exception {
-        PermissionDto permissionDto = PermissionDto.builder()
+        PermissionResponseDto permissionDto = PermissionResponseDto.builder()
                 .authority(PermissionAuthority.USER_READ.getAuthority())
                 .description(PermissionAuthority.USER_READ.getDescription())
                 .build();
 
         Pageable pageable = PageRequest.of(0, 10);
-        Page<PermissionDto> permissionPage = new PageImpl<>(List.of(permissionDto), pageable, 1);
+        Page<PermissionResponseDto> permissionPage = new PageImpl<>(List.of(permissionDto), pageable, 1);
 
         when(permissionService.findAll(any(Pageable.class))).thenReturn(permissionPage);
 
@@ -61,7 +61,7 @@ public class PermissionControllerTest {
     @DisplayName("GET /api/v1/permissions should return 200 OK with an empty page when no permissions exist")
     void getAllPermissions_whenNoPermissionsExist_shouldReturnOkAndEmptyPage() throws Exception {
         Pageable pageable = PageRequest.of(0, 10);
-        Page<PermissionDto> emptyPage = new PageImpl<>(List.of(), pageable, 0);
+        Page<PermissionResponseDto> emptyPage = new PageImpl<>(List.of(), pageable, 0);
 
         when(permissionService.findAll(any(Pageable.class))).thenReturn(emptyPage);
 

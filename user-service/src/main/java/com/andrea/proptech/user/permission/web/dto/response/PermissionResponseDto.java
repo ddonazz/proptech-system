@@ -1,9 +1,9 @@
-package com.andrea.proptech.user.permission.web.dto;
+package com.andrea.proptech.user.permission.web.dto.response;
 
 import lombok.Builder;
 
 @Builder
-public record PermissionDto(
+public record PermissionResponseDto(
         Long id,
         String authority,
         String description

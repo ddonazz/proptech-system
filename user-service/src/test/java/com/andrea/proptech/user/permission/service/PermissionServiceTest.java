@@ -3,8 +3,8 @@ package com.andrea.proptech.user.permission.service;
 import com.andrea.proptech.core.security.permission.PermissionAuthority;
 import com.andrea.proptech.user.permission.data.Permission;
 import com.andrea.proptech.user.permission.data.PermissionRepository;
-import com.andrea.proptech.user.permission.mapper.PermissionToPermissionDtoMapper;
-import com.andrea.proptech.user.permission.web.dto.PermissionDto;
+import com.andrea.proptech.user.permission.mapper.PermissionToPermissionResponseDtoMapper;
+import com.andrea.proptech.user.permission.web.dto.response.PermissionResponseDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,7 +27,7 @@ public class PermissionServiceTest {
     private PermissionRepository permissionRepository;
 
     @Mock
-    private PermissionToPermissionDtoMapper permissionToPermissionDtoMapper;
+    private PermissionToPermissionResponseDtoMapper permissionToPermissionResponseDtoMapper;
 
     @InjectMocks
     private PermissionService permissionService;
@@ -37,12 +37,12 @@ public class PermissionServiceTest {
         Pageable pageable = PageRequest.of(0, 10);
         Permission permission = new Permission(PermissionAuthority.ADMIN_ACCESS);
         Page<Permission> page = new PageImpl<>(List.of(permission));
-        PermissionDto permissionDto = PermissionDto.builder().build();
+        PermissionResponseDto permissionDto = PermissionResponseDto.builder().build();
 
         when(permissionRepository.findAll(pageable)).thenReturn(page);
-        when(permissionToPermissionDtoMapper.apply(permission)).thenReturn(permissionDto);
+        when(permissionToPermissionResponseDtoMapper.apply(permission)).thenReturn(permissionDto);
 
-        Page<PermissionDto> result = permissionService.findAll(pageable);
+        Page<PermissionResponseDto> result = permissionService.findAll(pageable);
 
         assertEquals(1, result.getTotalElements());
         assertEquals(permissionDto, result.getContent().getFirst());

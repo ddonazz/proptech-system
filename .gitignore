@@ -54,6 +54,8 @@ logs/
 # ---------------------------------------------------
 application-local.yml
 application-dev.yml
+application-local.yaml
+application-dev.yaml
 *.key
 *.pem
 .env

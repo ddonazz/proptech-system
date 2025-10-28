@@ -21,6 +21,11 @@ spring:
               predicates:
                 - Path=/api/v1/permissions/**
 
+            - id: customer-service-route
+              uri: lb://customer-service
+              predicates:
+                - Path=/api/v1/customers/**
+
             - id: auth-service-oauth-route
               uri: lb://auth-service
               predicates:
@@ -33,6 +38,14 @@ spring:
               filters:
                 - RewritePath=/v3/api-docs/user-service, /v3/api-docs
 
+            - id: customer-service-openapi-route
+              uri: lb://customer-service
+              predicates:
+                - Path=/v3/api-docs/customer-service
+              filters:
+                - RewritePath=/v3/api-docs/customer-service, /v3/api-docs
+
+
   security:
     oauth2:
       resourceserver:
@@ -44,6 +57,8 @@ springdoc:
     urls:
       - name: User Service
         url: /v3/api-docs/user-service
+      - name: Customer Service
+        url: /v3/api-docs/customer-service
 
 management:
   endpoints:

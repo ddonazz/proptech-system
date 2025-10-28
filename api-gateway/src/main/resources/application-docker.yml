@@ -21,12 +21,24 @@ spring:
               predicates:
                 - Path=/api/v1/permissions/**
 
+            - id: customer-service-route
+              uri: http://customer-service:8080
+              predicates:
+                - Path=/api/v1/customers/**
+
             - id: user-service-openapi-route
               uri: http://user-service:8080
               predicates:
                 - Path=/v3/api-docs/user-service
               filters:
                 - RewritePath=/v3/api-docs/user-service, /v3/api-docs
+
+            - id: customer-service-openapi-route
+              uri: http://customer-service:8080
+              predicates:
+                - Path=/v3/api-docs/customer-service
+              filters:
+                - RewritePath=/v3/api-docs/customer-service, /v3/api-docs
 
             - id: auth-service-oauth-route
               uri: http://auth-service:8080
@@ -37,9 +49,11 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: http://auth-service:8080/oauth2/jwks
-          
+
 springdoc:
   swagger-ui:
     urls:
       - name: User Service
         url: /v3/api-docs/user-service
+      - name: Customer Service
+        url: /v3/api-docs/customer-service

@@ -9,3 +9,7 @@ authority,description
 "role:delete","Delete role"
 "permission:read","Read permission"
 "admin:access","Admin access"
+"customer:read","Read customer"
+"customer:create","Create customer"
+"customer:update","Update customer"
+"customer:delete","Delete customer"

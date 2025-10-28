@@ -5,11 +5,26 @@ services:
     ports:
       - "5433:5432"
     environment:
+      POSTGRES_DB: user-service
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: user-service
     volumes:
       - user-postgres-data-local:/var/lib/postgresql/data
+    networks:
+      - local-network
+
+  customer-db:
+    image: postgres:18-alpine
+    container_name: customer-postgres-db-local
+    ports:
+      - "5434:5432"
+    restart: always
+    environment:
+      POSTGRES_DB: customer-service
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - customer-postgres-data-local:/var/lib/postgresql/data
     networks:
       - local-network
 
@@ -66,6 +81,7 @@ services:
 
 volumes:
   user-postgres-data-local:
+  customer-postgres-data-local:
   rabbitmq-data-local:
   pgadmin-data-local:
   grafana-data-local:

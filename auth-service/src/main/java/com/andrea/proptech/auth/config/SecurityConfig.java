@@ -1,5 +1,6 @@
 package com.andrea.proptech.auth.config;
 
+import com.andrea.proptech.core.security.permission.PermissionAuthority;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
@@ -107,12 +108,11 @@ public class SecurityConfig {
 
                 .redirectUri("http://localhost:8080/swagger-ui/oauth2-redirect.html")
 
-                .scope("admin:access")
-                .scope("role:read")
-                .scope("role:write")
-                .scope("user:read")
-                .scope("user:write")
-                .scope("user:read")
+                .scopes(scopes -> {
+                    for (PermissionAuthority auth : PermissionAuthority.values()) {
+                        scopes.add(auth.toString());
+                    }
+                })
 
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();

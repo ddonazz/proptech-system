@@ -1,4 +1,4 @@
-package com.andrea.proptech.user.config;
+package com.proptech.andrea.customer.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -29,7 +29,7 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("User Service API")
+                        .title("Customer Service API")
                         .version("v1")
                 )
                 .servers(List.of(new Server().url(serverUrl).description("API Gateway URL")))
@@ -43,15 +43,10 @@ public class OpenApiConfig {
                                                 .tokenUrl(tokenUrl)
                                                 .scopes(new Scopes()
                                                         .addString("admin:access", "Scope for administrator access")
-                                                        .addString("user:read", "Scope for reading users")
-                                                        .addString("user:create", "Scope for creating users")
-                                                        .addString("user:update", "Scope for updating users")
-                                                        .addString("user:delete", "Scope for deleting users")
-                                                        .addString("role:read", "Scope for reading roles")
-                                                        .addString("role:create", "Scope for creating roles")
-                                                        .addString("role:update", "Scope for updating roles")
-                                                        .addString("role:delete", "Scope for deleting roles")
-                                                        .addString("permission:read", "Scope for reading permissions")
+                                                        .addString("customer:read", "Scope for reading users")
+                                                        .addString("customer:create", "Scope for creating users")
+                                                        .addString("customer:update", "Scope for updating users")
+                                                        .addString("customer:delete", "Scope for deleting users")
                                                 )
                                         )
                                 )
@@ -59,6 +54,5 @@ public class OpenApiConfig {
                 )
                 .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEMA_NAME));
     }
-
 
 }

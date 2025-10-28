@@ -1,0 +1,258 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-create-sequences
+      author: andrea
+      changes:
+        - createSequence:
+            sequenceName: CUSTOMER_SEQUENCE
+            incrementBy: 1
+        - createSequence:
+            sequenceName: ADDRESS_SEQUENCE
+            incrementBy: 1
+        - createSequence:
+            sequenceName: CONTACT_SEQUENCE
+            incrementBy: 1
+
+  - changeSet:
+      id: 2-create-customers-addresses-table
+      author: andrea
+      changes:
+        - createTable:
+            tableName: customers_addresses
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: "NEXTVAL('ADDRESS_SEQUENCE')"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: street
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: number
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: postal_code
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: city
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: province
+                  type: varchar(100)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: country
+                  type: varchar(2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: business_customer_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+
+  - changeSet:
+      id: 3-create-customers-table
+      author: andrea
+      changes:
+        - createTable:
+            tableName: customers
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: "NEXTVAL('CUSTOMER_SEQUENCE')"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: customer_type
+                  type: varchar(31)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: phone_number
+                  type: varchar(255)
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    unique: true
+
+  - changeSet:
+      id: 4-create-customers-private-table
+      author: andrea
+      changes:
+        - createTable:
+            tableName: customers_private
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_private_customer_base
+                    references: customers(id)
+                    deleteCascade: true
+              - column:
+                  name: first_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fiscal_code
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: birth_date
+                  type: date
+              - column:
+                  name: birth_place
+                  type: varchar(255)
+              - column:
+                  name: nationality
+                  type: varchar(255)
+              - column:
+                  name: billing_address_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_private_billing_address
+                    references: customers_addresses(id)
+
+  - changeSet:
+      id: 5-create-customers-business-table
+      author: andrea
+      changes:
+        - createTable:
+            tableName: customers_business
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_business_customer_base
+                    references: customers(id)
+                    deleteCascade: true
+              - column:
+                  name: company_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: vat_number
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: fiscal_code
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+              - column:
+                  name: sdi_code
+                  type: varchar(7)
+              - column:
+                  name: pec_email
+                  type: varchar(255)
+              - column:
+                  name: legal_address_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_business_legal_address
+                    references: customers_addresses(id)
+              - column:
+                  name: billing_address_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_business_billing_address
+                    references: customers_addresses(id)
+
+  - changeSet:
+      id: 6-create-customer-contacts-table
+      author: andrea
+      changes:
+        - createTable:
+            tableName: customer_contacts
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: "NEXTVAL('CONTACT_SEQUENCE')"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: job_title
+                  type: varchar(255)
+              - column:
+                  name: business_customer_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_contact_to_business
+                    references: customers_business(id)
+
+  - changeSet:
+      id: 7-add-fk-to-addresses-for-operational
+      author: andrea
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: customers_addresses
+            baseColumnNames: business_customer_id
+            constraintName: fk_operational_address_to_business
+            referencedTableName: customers_business
+            referencedColumnNames: id
+            onDelete: CASCADE

@@ -20,6 +20,7 @@
         <module>email-service</module>
         <module>core-messaging</module>
         <module>core-config</module>
+        <module>customer-service</module>
     </modules>
 
     <properties>

@@ -127,6 +127,8 @@ public class SecurityConfig {
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .redirectUri("http://localhost:4200/dashboard")
                 .scopes(scopes -> {
+                    scopes.add("openid");
+                    scopes.add("offline_access");
                     for (PermissionAuthority auth : PermissionAuthority.values()) {
                         scopes.add(auth.toString());
                     }

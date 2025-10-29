@@ -120,7 +120,7 @@ public class SecurityConfig {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://localhost:4200/home")
+                .redirectUri("http://localhost:4200/dashboard")
                 .scopes(scopes -> {
                     for (PermissionAuthority auth : PermissionAuthority.values()) {
                         scopes.add(auth.toString());

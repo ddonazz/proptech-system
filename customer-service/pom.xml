@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>customer-service</artifactId>
-    <description>Customer Service</description>
+    <name>Customer Service</name>
 
     <dependencies>
         <dependency>

@@ -1,8 +1,8 @@
-package com.proptech.andrea.customer.customer.mapper;
+package com.proptech.andrea.customer.customer.mapper.response;
 
-import com.proptech.andrea.customer.customer.data.BusinessCustomer;
 import com.proptech.andrea.customer.customer.data.Customer;
-import com.proptech.andrea.customer.customer.data.PrivateCustomer;
+import com.proptech.andrea.customer.customer.data.business.BusinessCustomer;
+import com.proptech.andrea.customer.customer.data.individual.IndividualCustomer;
 import com.proptech.andrea.customer.customer.web.dto.response.CustomerResponseDto;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +15,8 @@ public class CustomerToCustomerResponseDtoMapper implements Function<Customer, C
     public CustomerResponseDto apply(Customer customer) {
         String displayName;
 
-        if (customer instanceof PrivateCustomer privateCustomer) {
-            displayName = privateCustomer.getFirstName() + " " + privateCustomer.getLastName();
+        if (customer instanceof IndividualCustomer individualCustomer) {
+            displayName = individualCustomer.getFirstName() + " " + individualCustomer.getLastName();
         } else if (customer instanceof BusinessCustomer businessCustomer) {
             displayName = businessCustomer.getCompanyName();
         } else {

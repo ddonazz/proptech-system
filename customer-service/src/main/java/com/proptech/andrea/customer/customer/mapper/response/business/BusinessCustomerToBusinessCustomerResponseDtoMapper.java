@@ -1,8 +1,8 @@
-package com.proptech.andrea.customer.customer.mapper;
+package com.proptech.andrea.customer.customer.mapper.response.business;
 
 import com.proptech.andrea.customer.address.mapper.AddressToAddressResponseDtoMapper;
-import com.proptech.andrea.customer.customer.data.BusinessCustomer;
-import com.proptech.andrea.customer.customer.web.dto.response.BusinessCustomerResponseDto;
+import com.proptech.andrea.customer.customer.data.business.BusinessCustomer;
+import com.proptech.andrea.customer.customer.web.dto.response.business.BusinessCustomerResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;

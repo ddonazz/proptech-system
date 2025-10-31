@@ -20,6 +20,7 @@ public class UserToUserResponseDtoMapper implements Function<User, UserResponseD
         return UserResponseDto.builder()
                 .id(user.getId())
                 .username(user.getUsername())
+                .email(user.getEmail())
                 .roles(user.getRoles()
                         .stream()
                         .map(roleToRoleResponseDtoMapper)

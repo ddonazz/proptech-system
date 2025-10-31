@@ -1,4 +1,4 @@
-package com.proptech.andrea.customer.customer.web.dto.request;
+package com.proptech.andrea.customer.customer.web.dto.request.individual;
 
 import com.proptech.andrea.customer.address.web.dto.request.AddressCreateDto;
 import jakarta.validation.Valid;
@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-public record PrivateCustomerCreateDto(
+public record IndividualCustomerCreateDto(
         @NotBlank
         @Email
         String email,

@@ -1,6 +1,7 @@
-package com.proptech.andrea.customer.customer.data;
+package com.proptech.andrea.customer.customer.data.business;
 
 import com.proptech.andrea.customer.address.data.Address;
+import com.proptech.andrea.customer.customer.data.Customer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

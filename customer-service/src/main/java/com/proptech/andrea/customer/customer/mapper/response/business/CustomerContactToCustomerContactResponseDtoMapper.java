@@ -1,7 +1,7 @@
-package com.proptech.andrea.customer.customer.mapper;
+package com.proptech.andrea.customer.customer.mapper.response.business;
 
-import com.proptech.andrea.customer.customer.data.CustomerContact;
-import com.proptech.andrea.customer.customer.web.dto.response.CustomerContactResponseDto;
+import com.proptech.andrea.customer.customer.data.business.CustomerContact;
+import com.proptech.andrea.customer.customer.web.dto.response.business.CustomerContactResponseDto;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 

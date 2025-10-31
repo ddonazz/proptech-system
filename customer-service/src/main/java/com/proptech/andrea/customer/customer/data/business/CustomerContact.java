@@ -1,4 +1,4 @@
-package com.proptech.andrea.customer.customer.data;
+package com.proptech.andrea.customer.customer.data.business;
 
 import jakarta.persistence.*;
 import lombok.Getter;

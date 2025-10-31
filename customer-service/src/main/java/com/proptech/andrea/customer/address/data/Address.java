@@ -1,5 +1,6 @@
 package com.proptech.andrea.customer.address.data;
 
+import com.proptech.andrea.customer.customer.data.business.BusinessCustomer;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,6 +37,10 @@ public class Address {
 
     @Column(nullable = false, length = 2)
     private String country;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "business_customer_id")
+    private BusinessCustomer businessCustomer;
 
     @Override
     public boolean equals(Object o) {

@@ -1,8 +1,8 @@
-package com.proptech.andrea.customer.customer.mapper;
+package com.proptech.andrea.customer.customer.mapper.response.individual;
 
 import com.proptech.andrea.customer.address.mapper.AddressToAddressResponseDtoMapper;
-import com.proptech.andrea.customer.customer.data.PrivateCustomer;
-import com.proptech.andrea.customer.customer.web.dto.response.PrivateCustomerResponseDto;
+import com.proptech.andrea.customer.customer.data.individual.IndividualCustomer;
+import com.proptech.andrea.customer.customer.web.dto.response.individual.IndividualCustomerResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -10,13 +10,13 @@ import java.util.function.Function;
 
 @Component
 @RequiredArgsConstructor
-public class PrivateCustomerToPrivateCustomerResponseDtoMapper implements Function<PrivateCustomer, PrivateCustomerResponseDto> {
+public class IndividualCustomerToIndividualCustomerResponseDtoMapper implements Function<IndividualCustomer, IndividualCustomerResponseDto> {
 
     private final AddressToAddressResponseDtoMapper addressToAddressResponseDtoMapper;
 
     @Override
-    public PrivateCustomerResponseDto apply(PrivateCustomer customer) {
-        return PrivateCustomerResponseDto.builder()
+    public IndividualCustomerResponseDto apply(IndividualCustomer customer) {
+        return IndividualCustomerResponseDto.builder()
                 .id(customer.getId())
                 .email(customer.getEmail())
                 .phoneNumber(customer.getPhoneNumber())

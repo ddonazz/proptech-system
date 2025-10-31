@@ -1,6 +1,7 @@
-package com.proptech.andrea.customer.customer.data;
+package com.proptech.andrea.customer.customer.data.individual;
 
 import com.proptech.andrea.customer.address.data.Address;
+import com.proptech.andrea.customer.customer.data.Customer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,12 +10,12 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "customers_private")
-@DiscriminatorValue("PRIVATE")
+@Table(name = "customers_individual")
+@DiscriminatorValue("INDIVIDUAL")
 @Getter
 @Setter
 @NoArgsConstructor
-public class PrivateCustomer extends Customer {
+public class IndividualCustomer extends Customer {
 
     @Column(nullable = false)
     private String firstName;

@@ -1,4 +1,4 @@
-package com.proptech.andrea.customer.customer.web.dto.response;
+package com.proptech.andrea.customer.customer.web.dto.response.business;
 
 import lombok.Builder;
 

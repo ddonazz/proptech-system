@@ -1,14 +1,13 @@
-package com.proptech.andrea.customer.customer.mapper;
+package com.proptech.andrea.customer.customer.mapper.request.business;
 
 import com.proptech.andrea.customer.address.mapper.AddressCreateDtoToAddressMapper;
-import com.proptech.andrea.customer.customer.data.BusinessCustomer;
-import com.proptech.andrea.customer.customer.web.dto.request.BusinessCustomerCreateDto;
+import com.proptech.andrea.customer.customer.data.business.BusinessCustomer;
+import com.proptech.andrea.customer.customer.web.dto.request.business.BusinessCustomerCreateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -29,24 +28,10 @@ public class BusinessCustomerCreateDtoToBusinessCustomerMapper implements Functi
         customer.setSdiCode(dto.sdiCode());
         customer.setPecEmail(dto.pecEmail());
 
-        if (dto.legalAddress() != null) {
-            customer.setLegalAddress(addressCreateDtoToAddressMapper.apply(dto.legalAddress()));
-        }
+        customer.setLegalAddress(addressCreateDtoToAddressMapper.apply(dto.legalAddress()));
+        customer.setBillingAddress(addressCreateDtoToAddressMapper.apply(dto.billingAddress()));
 
-        if (dto.billingAddress() != null) {
-            customer.setBillingAddress(addressCreateDtoToAddressMapper.apply(dto.billingAddress()));
-        }
-
-        if (dto.operationalAddresses() != null) {
-            customer.setOperationalAddresses(
-                    dto.operationalAddresses().stream()
-                            .map(addressCreateDtoToAddressMapper)
-                            .collect(Collectors.toSet())
-            );
-        } else {
-            customer.setOperationalAddresses(Collections.emptySet());
-        }
-
+        customer.setOperationalAddresses(Collections.emptySet());
         customer.setContacts(Collections.emptySet());
 
         return customer;

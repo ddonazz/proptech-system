@@ -98,11 +98,11 @@ databaseChangeLog:
                     unique: true
 
   - changeSet:
-      id: 4-create-customers-private-table
+      id: 4-create-customers-individual-table
       author: andrea
       changes:
         - createTable:
-            tableName: customers_private
+            tableName: customers_individual
             columns:
               - column:
                   name: id
@@ -110,7 +110,7 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
-                    foreignKeyName: fk_private_customer_base
+                    foreignKeyName: fk_individual_customer_base
                     references: customers(id)
                     deleteCascade: true
               - column:
@@ -143,7 +143,7 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     nullable: true
-                    foreignKeyName: fk_private_billing_address
+                    foreignKeyName: fk_individual_billing_address
                     references: customers_addresses(id)
 
   - changeSet:

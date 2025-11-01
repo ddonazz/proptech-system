@@ -33,7 +33,7 @@ public class IndividualCustomerController {
 
     @Operation(summary = "Create a new individual customer")
     @PostMapping
-    @PreAuthorize("hasAuthority('SCOPE_customer:write')")
+    @PreAuthorize("hasAuthority('SCOPE_customer:create')")
     public ResponseEntity<IndividualCustomerResponseDto> createPrivateCustomer(@Validated @RequestBody IndividualCustomerCreateDto request) {
         IndividualCustomerResponseDto response = individualCustomerService.createPrivateCustomer(request);
 
@@ -47,7 +47,7 @@ public class IndividualCustomerController {
 
     @Operation(summary = "Update a individual customer's main details")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_customer:write')")
+    @PreAuthorize("hasAuthority('SCOPE_customer:update')")
     public ResponseEntity<IndividualCustomerResponseDto> updatePrivateCustomer(@PathVariable Long id, @Validated @RequestBody IndividualCustomerUpdateDto request) {
         IndividualCustomerResponseDto response = individualCustomerService.updatePrivateCustomer(id, request);
         return ResponseEntity.ok(response);

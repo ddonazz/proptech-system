@@ -37,7 +37,7 @@ public class BusinessCustomerController {
 
     @Operation(summary = "Create a new business customer")
     @PostMapping
-    @PreAuthorize("hasAuthority('SCOPE_customer:write')")
+    @PreAuthorize("hasAuthority('SCOPE_customer:create')")
     public ResponseEntity<BusinessCustomerResponseDto> createBusinessCustomer(@Validated @RequestBody BusinessCustomerCreateDto request) {
         BusinessCustomerResponseDto response = businessCustomerService.createBusinessCustomer(request);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -50,7 +50,7 @@ public class BusinessCustomerController {
 
     @Operation(summary = "Update a business customer's main details")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_customer:write')")
+    @PreAuthorize("hasAuthority('SCOPE_customer:update')")
     public ResponseEntity<BusinessCustomerResponseDto> updateBusinessCustomer(
             @PathVariable Long id,
             @Validated @RequestBody BusinessCustomerUpdateDto request) {
@@ -63,7 +63,7 @@ public class BusinessCustomerController {
 
     @Operation(summary = "Create a new contact for a business customer")
     @PostMapping("/{businessId}/contacts")
-    @PreAuthorize("hasAuthority('SCOPE_customer:write')")
+    @PreAuthorize("hasAuthority('SCOPE_customer:create')")
     public ResponseEntity<CustomerContactResponseDto> createContactForBusiness(
             @PathVariable Long businessId, @Validated @RequestBody CustomerContactCreateDto request) {
 
@@ -90,7 +90,7 @@ public class BusinessCustomerController {
 
     @Operation(summary = "Create a new operational address for a business customer")
     @PostMapping("/{businessId}/operational-addresses")
-    @PreAuthorize("hasAuthority('SCOPE_customer:write')")
+    @PreAuthorize("hasAuthority('SCOPE_customer:create')")
     public ResponseEntity<AddressResponseDto> createOperationalAddressForBusiness(
             @PathVariable Long businessId, @Validated @RequestBody AddressCreateDto request) {
         AddressResponseDto response = businessCustomerService.createOperationalAddressForBusiness(businessId, request);

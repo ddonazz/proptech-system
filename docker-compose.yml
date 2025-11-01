@@ -6,14 +6,21 @@ services:
     image: nndrez/auth-service
     container_name: auth-service
     restart: on-failure
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
     ports:
       - "9000:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
     networks:
       - app-network
     depends_on:
-      - user-service
+      user-service:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health/readiness" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     logging:
       driver: "gelf"
       options:
@@ -28,17 +35,39 @@ services:
     restart: on-failure
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATA_REDIS_HOST: redis-session
+      SPRING_DATA_REDIS_PORT: 6379
     ports:
       - "8080:8080"
     networks:
       - app-network
+    extra_hosts:
+      - "auth.local:host-gateway"
     depends_on:
-      - auth-service
-      - user-service
+      auth-service:
+        condition: service_healthy
+      customer-service:
+        condition: service_healthy
     logging:
       driver: "gelf"
       options:
         gelf-address: "udp://127.0.0.1:12201"
+
+  redis-session:
+    image: redis:8.2.2-alpine
+    container_name: redis-session
+    restart: always
+    networks:
+      - app-network
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-session-data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   user-db:
     image: postgres:18-alpine
@@ -52,6 +81,12 @@ services:
       - user-postgres-data:/var/lib/postgresql/data
     networks:
       - app-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${USER_POSTGRES_USER} -d ${USER_POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   user-service:
     build:
@@ -66,10 +101,18 @@ services:
       SPRING_DATASOURCE_USERNAME: ${USER_POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${USER_POSTGRES_PASSWORD}
     depends_on:
-      - user-db
-      - rabbitmq
+      user-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
       - app-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health/readiness" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     logging:
       driver: "gelf"
       options:
@@ -87,6 +130,12 @@ services:
       - customer-postgres-data:/var/lib/postgresql/data
     networks:
       - app-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${CUSTOMER_POSTGRES_USER} -d ${CUSTOMER_POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   customer-service:
     build:
@@ -101,8 +150,16 @@ services:
       SPRING_DATASOURCE_USERNAME: ${CUSTOMER_POSTGRES_USER:?Customer postgres user not defined}
       SPRING_DATASOURCE_PASSWORD: ${CUSTOMER_POSTGRES_PASSWORD:?Customer Postgres password not defined}
     depends_on:
-      - customer-db
-      - rabbitmq
+      customer-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health/readiness" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     networks:
       - app-network
     logging:
@@ -163,6 +220,12 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health/readiness" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     logging:
       driver: "gelf"
       options:
@@ -175,7 +238,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - app-network
 
@@ -187,6 +250,7 @@ services:
       - "3000:3000"
     volumes:
       - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
     networks:
       - app-network
     depends_on:
@@ -244,6 +308,8 @@ volumes:
   elasticsearch-data:
     driver: local
   customer-postgres-data:
+    driver: local
+  redis-session-data:
     driver: local
 
 networks:

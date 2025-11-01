@@ -9,7 +9,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9000
+          issuer-uri: http://auth.local:9000
           jwk-set-uri: http://auth-service:8080/oauth2/jwks
   rabbitmq:
     host: rabbitmq

@@ -62,7 +62,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus-local.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus-local.yml:/etc/prometheus/prometheus.yml
     networks:
       - local-network
 
@@ -79,12 +79,23 @@ services:
     depends_on:
       - prometheus
 
+  redis-session-local:
+    image: redis:8.2.2-alpine
+    container_name: redis-session-local
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-session-data-local:/data
+    networks:
+      - local-network
+
 volumes:
   user-postgres-data-local:
   customer-postgres-data-local:
   rabbitmq-data-local:
   pgadmin-data-local:
   grafana-data-local:
+  redis-session-data-local:
 
 networks:
   local-network:

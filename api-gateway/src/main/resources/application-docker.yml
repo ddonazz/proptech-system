@@ -10,21 +10,29 @@ spring:
               uri: http://user-service:8080
               predicates:
                 - Path=/api/v1/users/**
+              filters:
+                - TokenRelay=
 
             - id: role-service-route
               uri: http://user-service:8080
               predicates:
                 - Path=/api/v1/roles/**
+              filters:
+                - TokenRelay=
 
             - id: permission-service-route
               uri: http://user-service:8080
               predicates:
                 - Path=/api/v1/permissions/**
+              filters:
+                - TokenRelay=
 
             - id: customer-service-route
               uri: http://customer-service:8080
               predicates:
                 - Path=/api/v1/customers/**
+              filters:
+                - TokenRelay=
 
             - id: user-service-openapi-route
               uri: http://user-service:8080
@@ -40,20 +48,17 @@ spring:
               filters:
                 - RewritePath=/v3/api-docs/customer-service, /v3/api-docs
 
-            - id: auth-service-oauth-route
-              uri: http://auth-service:8080
-              predicates:
-                - Path=/oauth2/**
   security:
     oauth2:
+      client:
+        provider:
+          spring:
+            issuer-uri: http://auth.local:9000
+            authorization-uri: http://auth.local:9000/oauth2/authorize
+            token-uri: http://auth.local:9000/oauth2/token
+            jwk-set-uri: http://auth.local:9000/oauth2/jwks
+            user-info-uri: http://auth.local:9000/userinfo
       resourceserver:
         jwt:
-          jwk-set-uri: http://auth-service:8080/oauth2/jwks
-
-springdoc:
-  swagger-ui:
-    urls:
-      - name: User Service
-        url: /v3/api-docs/user-service
-      - name: Customer Service
-        url: /v3/api-docs/customer-service
+          issuer-uri: http://auth.local:9000
+          jwk-set-uri: http://auth.local:9000/oauth2/jwks

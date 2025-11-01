@@ -1,6 +1,8 @@
 spring:
   application:
     name: api-gateway
+  session:
+    store-type: redis
   cloud:
     gateway:
       server:
@@ -10,26 +12,29 @@ spring:
               uri: lb://user-service
               predicates:
                 - Path=/api/v1/users/**
+              filters:
+                - TokenRelay=
 
             - id: role-service-route
               uri: lb://user-service
               predicates:
                 - Path=/api/v1/roles/**
+              filters:
+                - TokenRelay=
 
             - id: permission-service-route
               uri: lb://user-service
               predicates:
                 - Path=/api/v1/permissions/**
+              filters:
+                - TokenRelay=
 
             - id: customer-service-route
               uri: lb://customer-service
               predicates:
                 - Path=/api/v1/customers/**
-
-            - id: auth-service-oauth-route
-              uri: lb://auth-service
-              predicates:
-                - Path=/oauth2/**
+              filters:
+                - TokenRelay=
 
             - id: user-service-openapi-route
               uri: lb://user-service
@@ -45,12 +50,20 @@ spring:
               filters:
                 - RewritePath=/v3/api-docs/customer-service, /v3/api-docs
 
-
   security:
     oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: lb://auth-service/oauth2/jwks
+      client:
+        registration:
+          proptech-bff:
+            provider: spring
+            client-id: "bff-client"
+            client-secret: "secret"
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: openid, profile, offline_access
+        provider:
+          spring:
+            issuer-uri: https://dev.proptech.com
 
 springdoc:
   swagger-ui:
@@ -68,3 +81,5 @@ management:
   endpoint:
     health:
       show-details: always
+      probes:
+        enabled: true

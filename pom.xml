@@ -11,6 +11,13 @@
 
     <name>PropTech System</name>
 
+    <scm>
+        <connection>scm:git:https://github.com/ddonazz/proptech-system.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/ddonazz/proptech-system.git</developerConnection>
+        <url>https://github.com/ddonazz/proptech-system</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <modules>
         <module>user-service</module>
         <module>auth-service</module>
@@ -25,7 +32,7 @@
 
     <properties>
         <java.version>21</java.version>
-        <spring-boot.version>3.5.6</spring-boot.version>
+        <spring-boot.version>3.5.7</spring-boot.version>
         <spring-cloud.version>2025.0.0</spring-cloud.version>
         <proptech-security-core.version>1.0.0-SNAPSHOT</proptech-security-core.version>
         <proptech-exception-core.version>1.0.0-SNAPSHOT</proptech-exception-core.version>

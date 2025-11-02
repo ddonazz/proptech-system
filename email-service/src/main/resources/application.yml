@@ -1,6 +1,6 @@
 spring:
   application:
-    name: mail-service # Comune a tutti
+    name: mail-service
 
   rabbitmq:
     host: ${SPRING_RABBITMQ_HOST:rabbitmq}

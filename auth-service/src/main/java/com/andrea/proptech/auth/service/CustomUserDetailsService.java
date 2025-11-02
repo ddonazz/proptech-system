@@ -17,14 +17,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private final WebClient userWebClient;
 
-    public CustomUserDetailsService(@Qualifier("internal-user-web-client") WebClient userWebClient) {
+    public CustomUserDetailsService(@Qualifier("user-service-web-client") WebClient userWebClient) {
         this.userWebClient = userWebClient;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDetailsResponse userDetailsResponse = userWebClient.get()
-                .uri("/by-username/{username}", username)
+                .uri("/internal/v1/users/by-username/{username}", username)
                 .retrieve()
                 .bodyToMono(UserDetailsResponse.class)
                 .blockOptional()

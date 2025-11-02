@@ -6,6 +6,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -44,6 +45,18 @@ import java.util.UUID;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Value("${proptech.auth.client.swagger-secret}")
+    private String rawSwaggerClientSecret;
+
+    @Value("${proptech.auth.client.bff-secret}")
+    private String rawBffClientSecret;
+
+    @Value("${proptech.auth.client.swagger-redirect-uri}")
+    private String swaggerRedirectUri;
+
+    @Value("${proptech.auth.client.bff-redirect-uri}")
+    private String bffRedirectUri;
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -98,12 +111,12 @@ public class SecurityConfig {
     public RegisteredClientRepository registeredClientRepository() {
         RegisteredClient swaggerClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("swagger-client")
-                .clientSecret(passwordEncoder().encode("secret"))
+                .clientSecret(passwordEncoder().encode(rawSwaggerClientSecret))
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://localhost:8080/swagger-ui/oauth2-redirect.html")
+                .redirectUri(swaggerRedirectUri)
                 .scopes(scopes -> {
                     for (PermissionAuthority auth : PermissionAuthority.values()) {
                         scopes.add(auth.toString());
@@ -116,11 +129,11 @@ public class SecurityConfig {
 
         RegisteredClient bffClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("bff-client")
-                .clientSecret(passwordEncoder().encode("secret"))
+                .clientSecret(passwordEncoder().encode(rawBffClientSecret))
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://localhost:8080/login/oauth2/code/proptech-bff")
+                .redirectUri(bffRedirectUri)
                 .scopes(scopes -> {
                     scopes.add(OidcScopes.OPENID);
                     scopes.add(OidcScopes.PROFILE);

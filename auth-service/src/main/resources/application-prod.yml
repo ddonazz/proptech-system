@@ -4,5 +4,8 @@ spring:
       authorizationserver:
         issuer: "https://dev.proptech.com"
 
-internal-user-web-client:
-  base-url: "http://user-service/internal/v1/users"
+proptech:
+  webclient:
+    clients:
+      user-service:
+        base-url: "http://user-service"

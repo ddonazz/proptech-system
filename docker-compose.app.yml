@@ -1,0 +1,127 @@
+services:
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    image: nndrez/user-service
+    container_name: user-service
+    restart: on-failure
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/${USER_POSTGRES_DB:?User postgres DB not defined}
+      SPRING_DATASOURCE_USERNAME: ${USER_POSTGRES_USER:?USer postgres user not defined}
+      SPRING_DATASOURCE_PASSWORD: ${USER_POSTGRES_PASSWORD:?User Postgres password not defined}
+    depends_on:
+      user-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health/readiness" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  customer-service:
+    build:
+      context: ./customer-service
+      dockerfile: Dockerfile
+    image: nndrez/customer-service
+    container_name: customer-service
+    restart: on-failure
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://customer-db:5432/${CUSTOMER_POSTGRES_DB:?Customer postgres DB not defined}
+      SPRING_DATASOURCE_USERNAME: ${CUSTOMER_POSTGRES_USER:?Customer postgres user not defined}
+      SPRING_DATASOURCE_PASSWORD: ${CUSTOMER_POSTGRES_PASSWORD:?Customer Postgres password not defined}
+    depends_on:
+      customer-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health/readiness" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    image: nndrez/auth-service
+    container_name: auth-service
+    restart: on-failure
+    ports:
+      - "9000:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - app-network
+    depends_on:
+      user-service:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health/readiness" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    image: nndrez/api-gateway
+    container_name: api-gateway
+    restart: on-failure
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATA_REDIS_HOST: redis-session
+      SPRING_DATA_REDIS_PORT: 6379
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    extra_hosts:
+      - "auth.local:host-gateway"
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      customer-service:
+        condition: service_healthy
+      redis-session:
+        condition: service_healthy
+
+  email-service:
+    build:
+      context: ./email-service
+      dockerfile: Dockerfile
+    image: nndrez/email-service
+    container_name: email-service
+    restart: on-failure
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_MAIL_HOST: ${SPRING_MAIL_HOST:?Host email not defined}
+      SPRING_MAIL_PORT: ${SPRING_MAIL_PORT:?Host email port not defined}
+      SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME?:Email username not defined}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD?:Email password not defined}
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH:-true}
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE:-true  }
+    networks:
+      - app-network
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health/readiness" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s

@@ -1,7 +1,7 @@
 services:
   auth-service:
     build:
-      context: /auth-service
+      context: ./auth-service
       dockerfile: Dockerfile
     image: nndrez/auth-service
     container_name: auth-service
@@ -21,14 +21,10 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://127.0.0.1:12201"
 
   api-gateway:
     build:
-      context: /api-gateway
+      context: ./api-gateway
       dockerfile: Dockerfile
     image: nndrez/api-gateway
     container_name: api-gateway
@@ -48,10 +44,6 @@ services:
         condition: service_healthy
       customer-service:
         condition: service_healthy
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://127.0.0.1:12201"
 
   redis-session:
     image: redis:8.2.2-alpine
@@ -90,7 +82,7 @@ services:
 
   user-service:
     build:
-      context: /user-service
+      context: ./user-service
       dockerfile: Dockerfile
     image: nndrez/user-service
     container_name: user-service
@@ -113,10 +105,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://127.0.0.1:12201"
 
   customer-db:
     image: postgres:18-alpine
@@ -139,7 +127,7 @@ services:
 
   customer-service:
     build:
-      context: /customer-service
+      context: ./customer-service
       dockerfile: Dockerfile
     image: nndrez/customer-service
     container_name: customer-service
@@ -162,26 +150,6 @@ services:
       start_period: 30s
     networks:
       - app-network
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://127.0.0.1:12201"
-
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: pgadmin
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
-    ports:
-      - "5050:80"
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-    depends_on:
-      - user-db
-    networks:
-      - app-network
 
   rabbitmq:
     image: rabbitmq:4.1.4-management-alpine
@@ -202,7 +170,7 @@ services:
 
   email-service:
     build:
-      context: /email-service
+      context: ./email-service
       dockerfile: Dockerfile
     image: nndrez/email-service
     container_name: email-service
@@ -226,75 +194,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
-    logging:
-      driver: "gelf"
-      options:
-        gelf-address: "udp://127.0.0.1:12201"
-
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    restart: always
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    networks:
-      - app-network
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    restart: always
-    ports:
-      - "3000:3000"
-    volumes:
-      - grafana-data:/var/lib/grafana
-      - ./grafana/provisioning/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
-    networks:
-      - app-network
-    depends_on:
-      - prometheus
-
-  elasticsearch:
-    image:
-      elasticsearch:9.1.5
-    container_name: elasticsearch
-    environment:
-      - "discovery.type=single-node"
-      - "xpack.security.enabled=false"
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
-    ports:
-      - "9200:9200"
-    networks:
-      - app-network
-
-  logstash:
-    image:
-      logstash:9.1.5
-    container_name: logstash
-    volumes:
-      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-    ports:
-      - "12201:12201/udp"
-    networks:
-      - app-network
-    depends_on:
-      - elasticsearch
-
-  kibana:
-    image: kibana:9.1.5
-    container_name: kibana
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    ports:
-      - "5601:5601"
-    networks:
-      - app-network
-    depends_on:
-      - elasticsearch
 
 volumes:
   user-postgres-data:

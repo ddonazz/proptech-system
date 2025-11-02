@@ -5,42 +5,43 @@ spring:
         webflux:
           routes:
             - id: user-service-route
-              uri: http://user-service:8080
+              uri: lb://user-service
               predicates:
                 - Path=/api/v1/users/**
               filters:
                 - TokenRelay=
 
             - id: role-service-route
-              uri: http://user-service:8080
+              uri: lb://user-service
               predicates:
                 - Path=/api/v1/roles/**
               filters:
                 - TokenRelay=
 
             - id: permission-service-route
-              uri: http://user-service:8080
+              uri: lb://user-service
               predicates:
                 - Path=/api/v1/permissions/**
               filters:
                 - TokenRelay=
 
             - id: customer-service-route
-              uri: http://customer-service:8080
+              uri: lb://customer-service
               predicates:
                 - Path=/api/v1/customers/**
               filters:
                 - TokenRelay=
 
+            # --- Rotte OpenAPI ---
             - id: user-service-openapi-route
-              uri: http://user-service:8080
+              uri: lb://user-service
               predicates:
                 - Path=/v3/api-docs/user-service
               filters:
                 - RewritePath=/v3/api-docs/user-service, /v3/api-docs
 
             - id: customer-service-openapi-route
-              uri: http://customer-service:8080
+              uri: lb://customer-service
               predicates:
                 - Path=/v3/api-docs/customer-service
               filters:
@@ -51,12 +52,4 @@ spring:
       client:
         provider:
           spring:
-            issuer-uri: http://auth.local:9000
-            authorization-uri: http://auth.local:9000/oauth2/authorize
-            token-uri: http://auth.local:9000/oauth2/token
-            jwk-set-uri: http://auth.local:9000/oauth2/jwks
-            user-info-uri: http://auth.local:9000/userinfo
-      resourceserver:
-        jwt:
-          issuer-uri: http://auth.local:9000
-          jwk-set-uri: http://auth.local:9000/oauth2/jwks
+            issuer-uri: https://dev.proptech.com

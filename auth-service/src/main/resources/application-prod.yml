@@ -1,0 +1,8 @@
+spring:
+  security:
+    oauth2:
+      authorizationserver:
+        issuer: "https://dev.proptech.com"
+
+internal-user-web-client:
+  base-url: "http://user-service/internal/v1/users"

@@ -1,7 +1,7 @@
 spring:
   devtools:
     restart:
-      enabled: false
+      enabled: false #
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -9,15 +9,15 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://auth.local:9000
-          jwk-set-uri: http://auth-service:8080/oauth2/jwks
+          issuer-uri: http://auth.local:9000 #
+          jwk-set-uri: http://auth-service:8080/oauth2/jwks #
   rabbitmq:
-    host: rabbitmq
-    port: 5672
+    host: rabbitmq #
+    port: 5672 #
 
 openapi:
   server:
-    url: http://localhost:8080
+    url: http://localhost:8080 #
   oauth2:
-    authorization-url: http://localhost:9000/oauth2/authorize
-    token-url: http://localhost:9000/oauth2/token
+    authorization-url: http://localhost:9000/oauth2/authorize #
+    token-url: http://localhost:9000/oauth2/token #

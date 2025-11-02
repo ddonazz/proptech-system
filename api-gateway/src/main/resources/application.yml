@@ -1,54 +1,11 @@
 spring:
   application:
     name: api-gateway
-  session:
-    store-type: redis
-  cloud:
-    gateway:
-      server:
-        webflux:
-          routes:
-            - id: user-service-route
-              uri: lb://user-service
-              predicates:
-                - Path=/api/v1/users/**
-              filters:
-                - TokenRelay=
 
-            - id: role-service-route
-              uri: lb://user-service
-              predicates:
-                - Path=/api/v1/roles/**
-              filters:
-                - TokenRelay=
-
-            - id: permission-service-route
-              uri: lb://user-service
-              predicates:
-                - Path=/api/v1/permissions/**
-              filters:
-                - TokenRelay=
-
-            - id: customer-service-route
-              uri: lb://customer-service
-              predicates:
-                - Path=/api/v1/customers/**
-              filters:
-                - TokenRelay=
-
-            - id: user-service-openapi-route
-              uri: lb://user-service
-              predicates:
-                - Path=/v3/api-docs/user-service
-              filters:
-                - RewritePath=/v3/api-docs/user-service, /v3/api-docs
-
-            - id: customer-service-openapi-route
-              uri: lb://customer-service
-              predicates:
-                - Path=/v3/api-docs/customer-service
-              filters:
-                - RewritePath=/v3/api-docs/customer-service, /v3/api-docs
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
 
   security:
     oauth2:
@@ -57,13 +14,12 @@ spring:
           proptech-bff:
             provider: spring
             client-id: "bff-client"
-            client-secret: "secret"
+            client-secret: ${BFF_CLIENT_SECRET:secret}
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             scope: openid, profile, offline_access
         provider:
           spring:
-            issuer-uri: https://dev.proptech.com
 
 springdoc:
   swagger-ui:

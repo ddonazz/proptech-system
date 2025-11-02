@@ -1,0 +1,16 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev.proptech.com #
+
+  rabbitmq:
+    host: rabbitmq #
+
+openapi:
+  server:
+    url: https://dev.proptech.com #
+  oauth2:
+    authorization-url: https://dev.proptech.com/oauth2/authorize
+    token-url: https://dev.proptech.com/oauth2/token

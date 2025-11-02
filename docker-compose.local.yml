@@ -39,9 +39,19 @@ services:
     networks:
       - local-network
 
+  redis-session-local:
+    image: redis:8.2.2-alpine
+    container_name: redis-session-local
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-session-data-local:/data
+    networks:
+      - local-network
+
   pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: pgadmin
+    container_name: pgadmin-local
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
@@ -55,46 +65,11 @@ services:
     networks:
       - local-network
 
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    restart: always
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus/prometheus-local.yml:/etc/prometheus/prometheus.yml
-    networks:
-      - local-network
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    restart: always
-    ports:
-      - "3000:3000"
-    volumes:
-      - grafana-data-local:/var/lib/grafana
-    networks:
-      - local-network
-    depends_on:
-      - prometheus
-
-  redis-session-local:
-    image: redis:8.2.2-alpine
-    container_name: redis-session-local
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis-session-data-local:/data
-    networks:
-      - local-network
-
 volumes:
   user-postgres-data-local:
   customer-postgres-data-local:
   rabbitmq-data-local:
   pgadmin-data-local:
-  grafana-data-local:
   redis-session-data-local:
 
 networks:

@@ -1,8 +1,8 @@
-internal-user-web-client:
-  base-url: "http://user-service:8080/internal/v1/users"
-
 spring:
   security:
     oauth2:
       authorizationserver:
-        issuer: http://auth.local:9000
+        issuer: "http://auth.local:9000"
+
+internal-user-web-client:
+  base-url: "http://user-service:8080/internal/v1/users"

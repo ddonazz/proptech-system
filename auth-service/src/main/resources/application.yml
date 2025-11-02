@@ -1,10 +1,6 @@
 spring:
   application:
     name: auth-service
-  security:
-    oauth2:
-      authorizationserver:
-        issuer: "https://dev.proptech.com"
 
 management:
   endpoints:
@@ -16,6 +12,3 @@ management:
       show-details: always
       probes:
         enabled: true
-
-internal-user-web-client:
-  base-url: "http://user-service/internal/v1/users"

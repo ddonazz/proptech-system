@@ -28,6 +28,7 @@
         <module>core-messaging</module>
         <module>core-config</module>
         <module>customer-service</module>
+        <module>bff-service</module>
     </modules>
 
     <properties>

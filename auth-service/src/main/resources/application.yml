@@ -19,4 +19,4 @@ proptech:
       bff-secret: ${PROPTECH_AUTH_CLIENT_BFF_SECRET:secret}
       swagger-secret: ${PROPTECH_AUTH_CLIENT_SWAGGER_SECRET:secret}
       bff-redirect-uri: ${PROPTECH_AUTH_CLIENT_BFF_REDIRECT_URI:http://localhost:8080/login/oauth2/code/proptech-bff}
-      swagger-redirect-uri: ${PROPTECH_AUTH_CLIENT_SWAGGER_REDIRECT_URI:http://localhost:8080/swagger-ui/oauth2-redirect.html}
+      swagger-redirect-uri: ${PROPTECH_AUTH_CLIENT_SWAGGER_REDIRECT_URI:http://localhost:8081/swagger-ui/oauth2-redirect.html}

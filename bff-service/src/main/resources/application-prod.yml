@@ -1,0 +1,7 @@
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          spring:
+            issuer-uri: https://dev.proptech.com

@@ -1,0 +1,30 @@
+spring:
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  security:
+    oauth2:
+      client:
+        registration:
+          proptech-bff:
+            provider: spring
+            client-id: "bff-client"
+            client-secret: ${BFF_CLIENT_SECRET:secret}
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: openid, profile, offline_access, user:read, user:update, user:create, user:delete, customer:read, customer:create, customer:update, customer:delete
+        provider:
+          spring:
+            user-name-attribute: sub
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,prometheus"
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true

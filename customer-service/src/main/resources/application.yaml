@@ -27,7 +27,7 @@ spring:
 
 openapi:
   server:
-    url: ${OPENAPI_SERVER_URL:http://localhost:8080}
+    url: ${OPENAPI_SERVER_URL:http://localhost:8081}
   oauth2:
     authorization-url: ${OPENAPI_OAUTH2_AUTHORIZATION-URL:http://localhost:9000/oauth2/authorize}
     token-url: ${OPENAPI_OAUTH2_TOKEN-URL:http://localhost:9000/oauth2/token}

@@ -9,8 +9,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>api-gateway</artifactId>
-    <name>API Gateway</name>
+    <artifactId>bff-service</artifactId>
 
     <dependencies>
         <dependency>
@@ -23,19 +22,16 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+            <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-kubernetes-client-loadbalancer</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -51,19 +47,6 @@
             <artifactId>micrometer-tracing-bridge-brave</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>com.andrea.proptech</groupId>
-            <artifactId>core-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.andrea.proptech</groupId>
-            <artifactId>core-exception</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
@@ -74,5 +57,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

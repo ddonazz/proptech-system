@@ -13,8 +13,10 @@ services:
     networks:
       - app-network
     depends_on:
-      - user-db
-      - customer-db
+      user-db:
+        condition: service_healthy
+      customer-db:
+        condition: service_healthy
 
 volumes:
   pgadmin-data:

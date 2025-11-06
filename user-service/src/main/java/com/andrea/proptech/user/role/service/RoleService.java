@@ -2,6 +2,7 @@ package com.andrea.proptech.user.role.service;
 
 import com.andrea.proptech.core.exception.ResourceInUseException;
 import com.andrea.proptech.core.exception.ResourceNotFoundException;
+import com.andrea.proptech.user.exception.UserErrorCodes;
 import com.andrea.proptech.user.permission.data.Permission;
 import com.andrea.proptech.user.permission.data.PermissionRepository;
 import com.andrea.proptech.user.role.data.Role;
@@ -69,8 +70,7 @@ public class RoleService {
     public void deleteRole(Long id) {
         Role role = retrieveRole(id);
         if (!role.getUsers().isEmpty()) {
-            throw new ResourceInUseException(
-                    "Unable to delete role with ID '" + id + "' as it is currently in use by one or more users.");
+            throw new ResourceInUseException(UserErrorCodes.ROLE_IN_USE, id);
         }
 
         roleRepository.deleteById(id);
@@ -78,7 +78,7 @@ public class RoleService {
 
     private Role retrieveRole(Long id) {
         return roleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found with name: '" + id + "'."));
+                .orElseThrow(() -> new ResourceNotFoundException(UserErrorCodes.ROLE_NOT_FOUND, id));
     }
 
     private Set<Permission> computePermissions(Collection<Long> permissionIds) {

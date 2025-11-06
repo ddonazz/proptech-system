@@ -1,6 +1,7 @@
 package com.andrea.proptech.user.user.service;
 
 import com.andrea.proptech.core.exception.ResourceNotFoundException;
+import com.andrea.proptech.user.exception.UserErrorCodes;
 import com.andrea.proptech.user.role.data.Role;
 import com.andrea.proptech.user.role.data.RoleRepository;
 import com.andrea.proptech.user.user.data.User;
@@ -83,7 +84,7 @@ public class UserService {
 
     private User retrieveUser(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User '" + id + "' not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(UserErrorCodes.USER_NOT_FOUND_BY_ID, id));
     }
 
 }

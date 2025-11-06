@@ -6,9 +6,11 @@ import com.proptech.andrea.customer.customer.data.individual.IndividualCustomerR
 import com.proptech.andrea.customer.customer.mapper.request.individual.IndividualCustomerCreateDtoToIndividualCustomerMapper;
 import com.proptech.andrea.customer.customer.mapper.request.individual.IndividualCustomerUpdateDtoToIndividualCustomerMapper;
 import com.proptech.andrea.customer.customer.mapper.response.individual.IndividualCustomerToIndividualCustomerResponseDtoMapper;
+import com.proptech.andrea.customer.customer.validation.CustomerValidator;
 import com.proptech.andrea.customer.customer.web.dto.request.individual.IndividualCustomerCreateDto;
 import com.proptech.andrea.customer.customer.web.dto.request.individual.IndividualCustomerUpdateDto;
 import com.proptech.andrea.customer.customer.web.dto.response.individual.IndividualCustomerResponseDto;
+import com.proptech.andrea.customer.exception.CustomerErrorCodes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,16 +25,20 @@ public class IndividualCustomerService {
     private final IndividualCustomerUpdateDtoToIndividualCustomerMapper individualCustomerUpdateDtoToIndividualCustomerMapper;
     private final IndividualCustomerToIndividualCustomerResponseDtoMapper individualCustomerToIndividualCustomerResponseDtoMapper;
 
+    private final CustomerValidator customerValidator;
+
     @Transactional(readOnly = true)
     public IndividualCustomerResponseDto getPrivateCustomerById(Long id) {
         return individualCustomerRepository.findById(id)
                 .map(individualCustomerToIndividualCustomerResponseDtoMapper)
-                .orElseThrow(() -> new ResourceNotFoundException("IndividualCustomer not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(CustomerErrorCodes.CUSTOMER_INDIVIDUAL_NOT_FOUND, id));
     }
 
 
     @Transactional
     public IndividualCustomerResponseDto createPrivateCustomer(IndividualCustomerCreateDto dto) {
+        customerValidator.validateNewFiscalCode(dto.fiscalCode());
+
         IndividualCustomer customer = individualCustomerCreateDtoToIndividualCustomerMapper.apply(dto);
         IndividualCustomer savedCustomer = individualCustomerRepository.save(customer);
         return individualCustomerToIndividualCustomerResponseDtoMapper.apply(savedCustomer);
@@ -49,7 +55,7 @@ public class IndividualCustomerService {
 
     private IndividualCustomer retrievePrivateCustomer(Long id) {
         return individualCustomerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("IndividualCustomer not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(CustomerErrorCodes.CUSTOMER_INDIVIDUAL_NOT_FOUND, id));
     }
 
 }

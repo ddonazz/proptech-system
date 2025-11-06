@@ -16,14 +16,18 @@ import com.proptech.andrea.customer.customer.mapper.request.business.BusinessCus
 import com.proptech.andrea.customer.customer.mapper.request.business.CustomerContactCreateDtoToCustomerContactMapper;
 import com.proptech.andrea.customer.customer.mapper.response.business.BusinessCustomerToBusinessCustomerResponseDtoMapper;
 import com.proptech.andrea.customer.customer.mapper.response.business.CustomerContactToCustomerContactResponseDtoMapper;
+import com.proptech.andrea.customer.customer.validation.CustomerValidator;
 import com.proptech.andrea.customer.customer.web.dto.request.business.BusinessCustomerCreateDto;
 import com.proptech.andrea.customer.customer.web.dto.request.business.BusinessCustomerUpdateDto;
 import com.proptech.andrea.customer.customer.web.dto.request.business.CustomerContactCreateDto;
 import com.proptech.andrea.customer.customer.web.dto.response.business.BusinessCustomerResponseDto;
 import com.proptech.andrea.customer.customer.web.dto.response.business.CustomerContactResponseDto;
+import com.proptech.andrea.customer.exception.CustomerErrorCodes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -41,15 +45,19 @@ public class BusinessCustomerService {
     private final AddressCreateDtoToAddressMapper addressCreateDtoToAddressMapper;
     private final AddressToAddressResponseDtoMapper addressToAddressResponseDtoMapper;
 
+    private final CustomerValidator customerValidator;
+
     @Transactional(readOnly = true)
     public BusinessCustomerResponseDto getBusinessCustomerById(Long id) {
         return businessCustomerRepository.findById(id)
                 .map(businessCustomerToBusinessCustomerResponseDtoMapper)
-                .orElseThrow(() -> new ResourceNotFoundException("BusinessCustomer not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(CustomerErrorCodes.CUSTOMER_BUSINESS_NOT_FOUND, id));
     }
 
     @Transactional
     public BusinessCustomerResponseDto createBusinessCustomer(BusinessCustomerCreateDto dto) {
+        customerValidator.validateNewFiscalCode(dto.fiscalCode());
+
         BusinessCustomer customer = businessCustomerCreateDtoToBusinessCustomerMapper.apply(dto);
         BusinessCustomer savedCustomer = businessCustomerRepository.save(customer);
         return businessCustomerToBusinessCustomerResponseDtoMapper.apply(savedCustomer);
@@ -58,6 +66,11 @@ public class BusinessCustomerService {
     @Transactional
     public BusinessCustomerResponseDto updateBusinessCustomer(Long id, BusinessCustomerUpdateDto dto) {
         BusinessCustomer customer = retrieveBusinessCustomer(id);
+
+        if (dto.fiscalCode() != null && !Objects.equals(customer.getFiscalCode(), dto.fiscalCode())) {
+            customerValidator.validateFiscalCodeOnUpdate(dto.fiscalCode(), id);
+        }
+
         BusinessCustomer customerToUpdate = businessCustomerUpdateDtoToBusinessCustomerMapper.apply(dto, customer);
         BusinessCustomer updatedCustomer = businessCustomerRepository.save(customerToUpdate);
         return businessCustomerToBusinessCustomerResponseDtoMapper.apply(updatedCustomer);
@@ -77,7 +90,7 @@ public class BusinessCustomerService {
     @Transactional
     public void deleteOperationalAddress(Long businessId, Long operationalAddressId) {
         Address operationalAddress = addressRepository.findByIdAndBusinessCustomer_Id(operationalAddressId, businessId)
-                .orElseThrow(() -> new ResourceNotFoundException("Operational address not found with id " + operationalAddressId + " for business " + businessId));
+                .orElseThrow(() -> new ResourceNotFoundException(CustomerErrorCodes.CUSTOMER_ADDRESS_NOT_FOUND, operationalAddressId, businessId));
 
         addressRepository.delete(operationalAddress);
     }
@@ -95,14 +108,14 @@ public class BusinessCustomerService {
     @Transactional
     public void deleteContact(Long businessId, Long contactId) {
         CustomerContact contact = customerContactRepository.findByIdAndBusinessCustomer_Id(contactId, businessId)
-                .orElseThrow(() -> new ResourceNotFoundException("Contact not found with id " + contactId + " for business " + businessId));
+                .orElseThrow(() -> new ResourceNotFoundException(CustomerErrorCodes.CUSTOMER_CONTACT_NOT_FOUND, contactId, businessId));
 
         customerContactRepository.delete(contact);
     }
 
     private BusinessCustomer retrieveBusinessCustomer(Long id) {
         return businessCustomerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("BusinessCustomer not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(CustomerErrorCodes.CUSTOMER_BUSINESS_NOT_FOUND));
     }
 
 }

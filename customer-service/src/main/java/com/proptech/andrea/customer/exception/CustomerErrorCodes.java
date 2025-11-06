@@ -11,6 +11,7 @@ public enum CustomerErrorCodes implements ErrorDefinition {
     // --- Customer (2000-2099) ---
     CUSTOMER_NOT_FOUND(2000, "customer.not.found", "Customer not found"),
     CUSTOMER_FISCAL_CODE_IN_USE(2001, "customer.fiscalcode.inuse", "Fiscal code is already in use by another customer"),
+    CUSTOMER_EMAIL_IN_USE(2002, "customer.email.inuse", "Email is already in use by another customer"),
 
     // --- Individual (2100-2199) ---
     CUSTOMER_INDIVIDUAL_NOT_FOUND(2100, "customer.individual.not.found", "Individual customer not found"),

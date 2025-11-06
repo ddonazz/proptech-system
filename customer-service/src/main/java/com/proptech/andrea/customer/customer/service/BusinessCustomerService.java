@@ -57,6 +57,7 @@ public class BusinessCustomerService {
     @Transactional
     public BusinessCustomerResponseDto createBusinessCustomer(BusinessCustomerCreateDto dto) {
         customerValidator.validateNewFiscalCode(dto.fiscalCode());
+        customerValidator.validateNewEmail(dto.email());
 
         BusinessCustomer customer = businessCustomerCreateDtoToBusinessCustomerMapper.apply(dto);
         BusinessCustomer savedCustomer = businessCustomerRepository.save(customer);
@@ -71,6 +72,10 @@ public class BusinessCustomerService {
             customerValidator.validateFiscalCodeOnUpdate(dto.fiscalCode(), id);
         }
 
+        if (dto.email() != null && !Objects.equals(customer.getEmail(), dto.email())) {
+            customerValidator.validateEmailOnUpdate(dto.email(), id);
+        }
+        
         BusinessCustomer customerToUpdate = businessCustomerUpdateDtoToBusinessCustomerMapper.apply(dto, customer);
         BusinessCustomer updatedCustomer = businessCustomerRepository.save(customerToUpdate);
         return businessCustomerToBusinessCustomerResponseDtoMapper.apply(updatedCustomer);

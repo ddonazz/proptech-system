@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class IndividualCustomerService {
@@ -38,6 +40,7 @@ public class IndividualCustomerService {
     @Transactional
     public IndividualCustomerResponseDto createPrivateCustomer(IndividualCustomerCreateDto dto) {
         customerValidator.validateNewFiscalCode(dto.fiscalCode());
+        customerValidator.validateNewEmail(dto.email());
 
         IndividualCustomer customer = individualCustomerCreateDtoToIndividualCustomerMapper.apply(dto);
         IndividualCustomer savedCustomer = individualCustomerRepository.save(customer);
@@ -48,6 +51,11 @@ public class IndividualCustomerService {
     @Transactional
     public IndividualCustomerResponseDto updatePrivateCustomer(Long id, IndividualCustomerUpdateDto dto) {
         IndividualCustomer customer = retrievePrivateCustomer(id);
+
+        if (dto.email() != null && !Objects.equals(customer.getEmail(), dto.email())) {
+            customerValidator.validateEmailOnUpdate(dto.email(), id);
+        }
+        
         IndividualCustomer customerToUpdate = individualCustomerUpdateDtoToIndividualCustomerMapper.apply(dto, customer);
         IndividualCustomer updatedCustomer = individualCustomerRepository.save(customerToUpdate);
         return individualCustomerToIndividualCustomerResponseDtoMapper.apply(updatedCustomer);

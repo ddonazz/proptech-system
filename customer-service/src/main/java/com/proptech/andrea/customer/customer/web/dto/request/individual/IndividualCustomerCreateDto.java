@@ -15,8 +15,6 @@ public record IndividualCustomerCreateDto(
 
         String phoneNumber,
 
-        Long userId,
-
         @NotBlank
         String firstName,
 

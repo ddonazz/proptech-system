@@ -13,7 +13,6 @@ public class CustomerContactCreateDtoToCustomerContactMapper implements Function
     @Override
     public CustomerContact apply(@NonNull CustomerContactCreateDto dto) {
         CustomerContact contact = new CustomerContact();
-        contact.setUserId(dto.userId());
         contact.setFirstName(dto.firstName());
         contact.setLastName(dto.lastName());
         contact.setEmail(dto.email());

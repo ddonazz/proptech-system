@@ -21,7 +21,6 @@ public class IndividualCustomerCreateDtoToIndividualCustomerMapper implements Fu
 
         customer.setEmail(dto.email());
         customer.setPhoneNumber(dto.phoneNumber());
-        customer.setUserId(dto.userId());
 
         customer.setFirstName(dto.firstName());
         customer.setLastName(dto.lastName());

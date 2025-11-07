@@ -90,6 +90,11 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.andrea.proptech</groupId>
+            <artifactId>core-dto</artifactId>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,5 +1,6 @@
 package com.andrea.proptech.user.user.web;
 
+import com.andrea.proptech.core.dto.PageResponse;
 import com.andrea.proptech.user.user.service.UserService;
 import com.andrea.proptech.user.user.web.dto.request.UserCreateDto;
 import com.andrea.proptech.user.user.web.dto.request.UserUpdateDto;
@@ -36,9 +37,11 @@ public class UserController {
     @Operation(summary = "Get users")
     @GetMapping
     @PreAuthorize("hasAuthority('SCOPE_user:read')")
-    public ResponseEntity<Page<UserResponseDto>> getUsers(Pageable pageable) {
-        Page<UserResponseDto> userDtos = userService.getUsers(pageable);
-        return ResponseEntity.ok(userDtos);
+    public ResponseEntity<PageResponse<UserResponseDto>> getUsers(Pageable pageable) {
+        Page<UserResponseDto> userDtosPage = userService.getUsers(pageable);
+
+        PageResponse<UserResponseDto> response = PageResponse.fromPage(userDtosPage);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Create a user")

@@ -29,6 +29,7 @@
         <module>core-config</module>
         <module>customer-service</module>
         <module>bff-service</module>
+        <module>core-dto</module>
     </modules>
 
     <properties>
@@ -39,6 +40,7 @@
         <proptech-exception-core.version>1.0.0-SNAPSHOT</proptech-exception-core.version>
         <proptech-messaging-core.version>1.0.0-SNAPSHOT</proptech-messaging-core.version>
         <proptech-config-core.version>1.0.0-SNAPSHOT</proptech-config-core.version>
+        <proptech-dto-core.version>1.0.0-SNAPSHOT</proptech-dto-core.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -90,6 +92,11 @@
                 <groupId>com.andrea.proptech</groupId>
                 <artifactId>core-messaging</artifactId>
                 <version>${proptech-messaging-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.andrea.proptech</groupId>
+                <artifactId>core-dto</artifactId>
+                <version>${proptech-dto-core.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springdoc</groupId>

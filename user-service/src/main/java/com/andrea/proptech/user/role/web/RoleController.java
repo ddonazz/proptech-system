@@ -1,5 +1,6 @@
 package com.andrea.proptech.user.role.web;
 
+import com.andrea.proptech.core.dto.PageResponse;
 import com.andrea.proptech.user.role.service.RoleService;
 import com.andrea.proptech.user.role.web.dto.request.RoleCreateDto;
 import com.andrea.proptech.user.role.web.dto.request.RoleUpdateDto;
@@ -36,8 +37,9 @@ public class RoleController {
     @Operation(summary = "Get roles")
     @GetMapping()
     @PreAuthorize("hasAuthority('SCOPE_role:read')")
-    public ResponseEntity<Page<RoleResponseDto>> getRoles(Pageable pageable) {
-        Page<RoleResponseDto> response = roleService.getRoles(pageable);
+    public ResponseEntity<PageResponse<RoleResponseDto>> getRoles(Pageable pageable) {
+        Page<RoleResponseDto> roleDtosPage = roleService.getRoles(pageable);
+        PageResponse<RoleResponseDto> response = PageResponse.fromPage(roleDtosPage);
         return ResponseEntity.ok(response);
     }
 

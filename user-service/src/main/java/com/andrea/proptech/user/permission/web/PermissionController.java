@@ -1,5 +1,6 @@
 package com.andrea.proptech.user.permission.web;
 
+import com.andrea.proptech.core.dto.PageResponse;
 import com.andrea.proptech.user.permission.service.PermissionService;
 import com.andrea.proptech.user.permission.web.dto.response.PermissionResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,8 +23,9 @@ public class PermissionController {
 
     @Operation(summary = "Retrieve available permissions")
     @GetMapping
-    public ResponseEntity<Page<PermissionResponseDto>> getAllPermissions(Pageable pageable) {
-        Page<PermissionResponseDto> permissions = permissionService.findAll(pageable);
-        return ResponseEntity.ok(permissions);
+    public ResponseEntity<PageResponse<PermissionResponseDto>> getAllPermissions(Pageable pageable) {
+        Page<PermissionResponseDto> permissionDtosPage = permissionService.findAll(pageable);
+        PageResponse<PermissionResponseDto> response = PageResponse.fromPage(permissionDtosPage);
+        return ResponseEntity.ok(response);
     }
 }

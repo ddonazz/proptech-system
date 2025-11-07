@@ -36,11 +36,6 @@
         <java.version>21</java.version>
         <spring-boot.version>3.5.7</spring-boot.version>
         <spring-cloud.version>2025.0.0</spring-cloud.version>
-        <proptech-security-core.version>1.0.0-SNAPSHOT</proptech-security-core.version>
-        <proptech-exception-core.version>1.0.0-SNAPSHOT</proptech-exception-core.version>
-        <proptech-messaging-core.version>1.0.0-SNAPSHOT</proptech-messaging-core.version>
-        <proptech-config-core.version>1.0.0-SNAPSHOT</proptech-config-core.version>
-        <proptech-dto-core.version>1.0.0-SNAPSHOT</proptech-dto-core.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -76,27 +71,27 @@
             <dependency>
                 <groupId>com.andrea.proptech</groupId>
                 <artifactId>core-security</artifactId>
-                <version>${proptech-security-core.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.andrea.proptech</groupId>
                 <artifactId>core-exception</artifactId>
-                <version>${proptech-exception-core.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.andrea.proptech</groupId>
                 <artifactId>core-config</artifactId>
-                <version>${proptech-config-core.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.andrea.proptech</groupId>
                 <artifactId>core-messaging</artifactId>
-                <version>${proptech-messaging-core.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.andrea.proptech</groupId>
                 <artifactId>core-dto</artifactId>
-                <version>${proptech-dto-core.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springdoc</groupId>

@@ -9,11 +9,13 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Log4j2
@@ -65,6 +67,37 @@ public class GlobalExceptionHandler {
         };
 
         return buildLocalizedError(localizedEx, request, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
+        Locale locale = LocaleContextHolder.getLocale();
+
+        String errorDetails = ex.getBindingResult().getFieldErrors().stream()
+                .map(error -> {
+                    String msg = messageSource.getMessage(error, locale);
+                    return "'" + error.getField() + "': " + msg;
+                })
+                .collect(Collectors.joining(", "));
+
+        ErrorDefinition validationError = CommonErrorCodes.VALIDATION_FAILED;
+        String localizedMessage = messageSource.getMessage(
+                validationError.getErrorCode(),
+                null,
+                validationError.getDefaultMessage(),
+                locale
+        );
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .instant(Instant.now())
+                .message(localizedMessage + " [" + errorDetails + "]")
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .path(request.getRequestURI())
+                .appCode(validationError.getCode())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)

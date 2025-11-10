@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: property-service
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    enabled: true
+    change-log: classpath:db/db.changelog-master.yaml #
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: ${SPRING_RABBITMQ_PORT:5672} #
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER-URI}
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+
+openapi:
+  server:
+    url: ${OPENAPI_SERVER_URL:http://localhost:8081}
+  oauth2:
+    authorization-url: ${OPENAPI_OAUTH2_AUTHORIZATION-URL:http://localhost:9000/oauth2/authorize}
+    token-url: ${OPENAPI_OAUTH2_TOKEN-URL:http://localhost:9000/oauth2/token}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,prometheus" #
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true

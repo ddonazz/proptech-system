@@ -8,6 +8,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -63,6 +64,14 @@ public class GlobalExceptionHandler {
         return buildLocalizedError(ex, request, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(HttpServletRequest request) {
+        BaseLocalizedException localizedEx = new BaseLocalizedException(CommonErrorCodes.ACCESS_DENIED) {
+        };
+
+        return buildLocalizedError(localizedEx, request, HttpStatus.FORBIDDEN);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
         Locale locale = LocaleContextHolder.getLocale();
@@ -100,15 +109,10 @@ public class GlobalExceptionHandler {
 
         log.error("Unhandled exception occurred", ex);
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .instant(Instant.now())
-                .message("An unexpected error occurred. Please contact support.")
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
-                .path(request.getRequestURI())
-                .build();
+        BaseLocalizedException localizedEx = new BaseLocalizedException(CommonErrorCodes.INTERNAL_SERVER_ERROR) {
+        };
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return buildLocalizedError(localizedEx, request, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

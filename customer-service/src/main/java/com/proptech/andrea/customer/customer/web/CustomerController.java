@@ -2,6 +2,7 @@ package com.proptech.andrea.customer.customer.web;
 
 import com.andrea.proptech.core.dto.PageResponse;
 import com.proptech.andrea.customer.customer.service.CustomerService;
+import com.proptech.andrea.customer.customer.web.dto.request.CustomerFilters;
 import com.proptech.andrea.customer.customer.web.dto.response.CustomerResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,8 +24,10 @@ public class CustomerController {
     @Operation(summary = "Get all customers (paginated, basic info)")
     @GetMapping
     @PreAuthorize("hasAuthority('SCOPE_customer:read')")
-    public ResponseEntity<PageResponse<CustomerResponseDto>> getCustomers(Pageable pageable) {
-        Page<CustomerResponseDto> customerDtosPage = customerService.getCustomers(pageable);
+    public ResponseEntity<PageResponse<CustomerResponseDto>> getCustomers(
+            Pageable pageable,
+            @ModelAttribute CustomerFilters filters) {
+        Page<CustomerResponseDto> customerDtosPage = customerService.getCustomers(filters, pageable);
 
         PageResponse<CustomerResponseDto> response = PageResponse.fromPage(customerDtosPage);
         return ResponseEntity.ok(response);

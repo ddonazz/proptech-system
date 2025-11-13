@@ -23,7 +23,7 @@ public class Unit {
     @JoinColumn(name = "property_id", nullable = false)
     private Property property;
 
-    @Column(nullable = false)
+    @Column
     private Long ownerId;
 
     @Column(nullable = false)

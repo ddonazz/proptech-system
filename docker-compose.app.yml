@@ -41,6 +41,8 @@ services:
         condition: service_healthy
       customer-service:
         condition: service_healthy
+      property-service:
+        condition: service_healthy
 
   user-service:
     build:
@@ -82,6 +84,32 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${CUSTOMER_POSTGRES_PASSWORD:?Customer Postgres password not defined}
     depends_on:
       customer-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health/readiness" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  property-service:
+    build:
+      context: ./property-service
+      dockerfile: Dockerfile
+    image: nndrez/property-service
+    container_name: property-service
+    restart: on-failure
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://property-db:5432/${PROPERTY_POSTGRES_DB:?Property postgres DB not defined}
+      SPRING_DATASOURCE_USERNAME: ${PROPERTY_POSTGRES_USER:?Property postgres user not defined}
+      SPRING_DATASOURCE_PASSWORD: ${PROPERTY_POSTGRES_PASSWORD:?Property Postgres password not defined}
+    depends_on:
+      property-db:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy

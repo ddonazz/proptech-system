@@ -1,0 +1,370 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-create-sequences
+      author: andrea
+      changes:
+        - createSequence:
+            sequenceName: ADDRESS_SEQUENCE
+            incrementBy: 1
+        - createSequence:
+            sequenceName: PROPERTY_SEQUENCE
+            incrementBy: 1
+        - createSequence:
+            sequenceName: UNIT_SEQUENCE
+            incrementBy: 1
+        - createSequence:
+            sequenceName: ROOM_SEQUENCE
+            incrementBy: 1
+        - createSequence:
+            sequenceName: CADASTRAL_SEQUENCE
+            incrementBy: 1
+        - createSequence:
+            sequenceName: APE_SEQUENCE
+            incrementBy: 1
+
+  - changeSet:
+      id: 2-create-addresses-table
+      author: andrea
+      changes:
+        - createTable:
+            tableName: addresses
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: "NEXTVAL('ADDRESS_SEQUENCE')"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: street
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: number
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: postal_code
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: city
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: municipality
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: province
+                  type: varchar(2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country
+                  type: varchar(2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: latitude
+                  type: double
+              - column:
+                  name: longitude
+                  type: double
+              - column:
+                  name: notes
+                  type: varchar(1024)
+
+  - changeSet:
+      id: 3-create-properties-table
+      author: andrea
+      changes:
+        - createTable:
+            tableName: properties
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: "NEXTVAL('PROPERTY_SEQUENCE')"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_property_address
+                    references: addresses(id)
+                    unique: true
+              - column:
+                  name: construction_year
+                  type: int
+
+  - changeSet:
+      id: 4-create-property-amenities-table
+      author: andrea
+      changes:
+        - createTable:
+            tableName: property_amenities
+            columns:
+              - column:
+                  name: property_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_amenity_property
+                    references: properties(id)
+              - column:
+                  name: amenities
+                  type: varchar(255)
+
+  - changeSet:
+      id: 5-create-units-table
+      author: andrea
+      changes:
+        - createTable:
+            tableName: units
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: "NEXTVAL('UNIT_SEQUENCE')"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: property_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_unit_property
+                    references: properties(id)
+              - column:
+                  name: owner_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+              - column:
+                  name: internal_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: internal_code
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+              - column:
+                  name: type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: floor
+                  type: varchar(255)
+              - column:
+                  name: internal_number
+                  type: varchar(255)
+              - column:
+                  name: total_area_mq
+                  type: double
+              - column:
+                  name: walkable_area_mq
+                  type: double
+              - column:
+                  name: room_count
+                  type: int
+              - column:
+                  name: bedroom_count
+                  type: int
+              - column:
+                  name: bathroom_count
+                  type: int
+              - column:
+                  name: max_occupancy
+                  type: int
+              - column:
+                  name: regional_identifier_code
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+
+  - changeSet:
+      id: 6-create-unit-amenities-table
+      author: andrea
+      changes:
+        - createTable:
+            tableName: unit_amenities
+            columns:
+              - column:
+                  name: unit_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_amenity_unit
+                    references: units(id)
+              - column:
+                  name: amenities
+                  type: varchar(255)
+
+  - changeSet:
+      id: 7-create-rooms-table
+      author: andrea
+      changes:
+        - createTable:
+            tableName: rooms
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: "NEXTVAL('ROOM_SEQUENCE')"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: unit_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_room_unit
+                    references: units(id)
+              - column:
+                  name: type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: area_mq
+                  type: double
+
+  - changeSet:
+      id: 8-create-room-features-table
+      author: andrea
+      changes:
+        - createTable:
+            tableName: room_features
+            columns:
+              - column:
+                  name: room_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_feature_room
+                    references: rooms(id)
+              - column:
+                  name: features
+                  type: varchar(255)
+
+  - changeSet:
+      id: 9-create-cadastral-data-table
+      author: andrea
+      changes:
+        - createTable:
+            tableName: cadastral_data
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: "NEXTVAL('CADASTRAL_SEQUENCE')"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: unit_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_cadastral_unit
+                    references: units(id)
+              - column:
+                  name: sheet
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: parcel
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: subordinate
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: building_class
+                  type: varchar(10)
+              - column:
+                  name: consistency
+                  type: varchar(255)
+              - column:
+                  name: cadastral_income
+                  type: double
+        - addUniqueConstraint:
+            tableName: cadastral_data
+            constraintName: uk_cadastral_data_unique
+            columnNames: sheet, parcel, subordinate
+
+  - changeSet:
+      id: 10-create-energy-certificates-table
+      author: andrea
+      changes:
+        - createTable:
+            tableName: energy_certificates
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: "NEXTVAL('APE_SEQUENCE')"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: unit_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_ape_unit
+                    references: units(id)
+                    unique: true
+              - column:
+                  name: certificate_identifier
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+              - column:
+                  name: energy_class
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: global_performance_index
+                  type: double
+              - column:
+                  name: issue_date
+                  type: date
+              - column:
+                  name: expiry_date
+                  type: date

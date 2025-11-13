@@ -24,9 +24,7 @@ public class PropertyCreateDtoToPropertyMapper implements Function<PropertyCreat
         property.setType(dto.type());
         property.setConstructionYear(dto.constructionYear());
 
-        if (dto.address() != null) {
-            property.setAddress(addressCreateDtoToAddressMapper.apply(dto.address()));
-        }
+        property.setAddress(addressCreateDtoToAddressMapper.apply(dto.address()));
 
         property.setAmenities(dto.amenities() != null ? dto.amenities() : Collections.emptySet());
         property.setUnits(Collections.emptySet());

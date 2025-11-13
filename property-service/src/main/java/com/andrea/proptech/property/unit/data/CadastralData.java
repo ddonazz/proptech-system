@@ -5,9 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "cadastral_data", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"sheet", "parcel", "subordinate"})
-})
+@Table(
+        name = "cadastral_data",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"sheet", "parcel", "subordinate"})
+        })
 @Getter
 @Setter
 public class CadastralData {

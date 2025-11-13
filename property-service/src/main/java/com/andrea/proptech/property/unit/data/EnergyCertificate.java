@@ -21,20 +21,14 @@ public class EnergyCertificate {
     @JoinColumn(name = "unit_id", nullable = false, unique = true)
     private Unit unit;
 
-    /**
-     * Codice identificativo univoco del certificato.
-     */
     @Column(unique = true)
     private String certificateIdentifier;
 
     @Column(nullable = false, length = 10)
-    private String energyClass; // Es: "A4", "B", "G"
+    private String energyClass;
 
-    /**
-     * Indice di prestazione energetica globale (EPgl,nren).
-     */
     private Double globalPerformanceIndex;
 
-    private LocalDate issueDate; // Data di rilascio
-    private LocalDate expiryDate; // Data di scadenza (di solito 10 anni)
+    private LocalDate issueDate;
+    private LocalDate expiryDate;
 }

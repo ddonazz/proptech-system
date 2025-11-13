@@ -41,6 +41,27 @@ services:
       retries: 5
       start_period: 10s
 
+  property-db:
+    image: postgres:18-alpine
+    container_name: property-postgres-db
+    restart: always
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_DB: ${PROPERTY_POSTGRES_DB}
+      POSTGRES_USER: ${PROPERTY_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${PROPERTY_POSTGRES_PASSWORD}
+    volumes:
+      - property-postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${PROPERTY_POSTGRES_USER} -d ${PROPERTY_POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
   rabbitmq:
     image: rabbitmq:4.1.4-management-alpine
     container_name: rabbitmq
@@ -77,6 +98,7 @@ services:
 volumes:
   user-postgres-data:
   customer-postgres-data:
+  property-postgres-data:
   rabbitmq-data:
   redis-session-data:
 

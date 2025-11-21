@@ -13,3 +13,7 @@ authority,description
 "customer:create","Create customer"
 "customer:update","Update customer"
 "customer:delete","Delete customer"
+"property:read","Read property"
+"property:create","Create property"
+"property:update","Update property"
+"property:delete","Delete property"

@@ -1,0 +1,17 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://auth.local:9000 #
+          jwk-set-uri: http://auth-service:8080/oauth2/jwks #
+  rabbitmq:
+    host: rabbitmq #
+    port: 5672 #
+
+openapi:
+  server:
+    url: http://localhost:8081 #
+  oauth2:
+    authorization-url: http://localhost:9000/oauth2/authorize #
+    token-url: http://localhost:9000/oauth2/token #

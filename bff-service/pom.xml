@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>bff-service</artifactId>
+    <name>Backend for Frontend Service</name>
 
     <dependencies>
         <dependency>

@@ -9,6 +9,8 @@ springdoc:
         url: /v3/api-docs/user-service
       - name: Customer Service
         url: /v3/api-docs/customer-service
+      - name: Property Service
+        url: /v3/api-docs/property-service
 
 management:
   endpoints:

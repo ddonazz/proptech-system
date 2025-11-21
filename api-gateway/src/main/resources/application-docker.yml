@@ -32,6 +32,13 @@ spring:
               filters:
                 - TokenRelay=
 
+            - id: property-service-route
+              uri: http://property-service:8080
+              predicates:
+                - Path=/api/v1/properties/**
+              filters:
+                - TokenRelay=
+
             - id: user-service-openapi-route
               uri: http://user-service:8080
               predicates:
@@ -45,6 +52,13 @@ spring:
                 - Path=/v3/api-docs/customer-service
               filters:
                 - RewritePath=/v3/api-docs/customer-service, /v3/api-docs
+
+            - id: property-service-openapi-route
+              uri: http://property-service:8080
+              predicates:
+                - Path=/v3/api-docs/property-service
+              filters:
+                - RewritePath=/v3/api-docs/property-service, /v3/api-docs
 
   security:
     oauth2:

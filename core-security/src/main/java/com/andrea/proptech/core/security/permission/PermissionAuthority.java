@@ -22,6 +22,11 @@ public enum PermissionAuthority {
     CUSTOMER_UPDATE("customer:update", "Update customer"),
     CUSTOMER_DELETE("customer:delete", "Delete customer"),
 
+    PROPERTY_READ("property:read", "Read property"),
+    PROPERTY_CREATE("property:create", "Create property"),
+    PROPERTY_UPDATE("property:update", "Update property"),
+    PROPERTY_DELETE("property:delete", "Delete property"),
+
     ADMIN_ACCESS("admin:access", "Admin access");
 
     PermissionAuthority(String authority, String description) {

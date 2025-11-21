@@ -30,6 +30,7 @@
         <module>customer-service</module>
         <module>bff-service</module>
         <module>core-dto</module>
+        <module>property-service</module>
     </modules>
 
     <properties>
